@@ -63,48 +63,48 @@ class SEBasicBlock(nn.Module):
         
         return out
     
-    class EmbeddingNetwork(nn.Module):
-        def __init__(self, block, layers, n_emb=12):
-            super(EmbeddingNetwork, self).__init__()
-            self.inplanes = 16
-            self.out_shape = n_emb
-            self.conv = nn.Sequential(
-                            nn.Conv2d(4, 16, kernel_size = [12,3], stride = [3,1], padding = [11,1]),
-                            nn.BatchNorm2d(16),
-                            nn.ReLU())
-            self.senet1 = self._make_layer(block, 16, layers[0], 'se_net', 2)
-            self.resnet1 = self._make_layer(block, 64, layers[1], 'resnet', 2)
-            self.senet2 = self._make_layer(block, 64, layers[2], 'se_net', 2)
-            self.resnet2 = self._make_layer(block, 128, layers[3], 'resnet', 2)
+class EmbeddingNetwork(nn.Module):
+    def __init__(self, block, layers, n_emb=12):
+        super(EmbeddingNetwork, self).__init__()
+        self.inplanes = 16
+        self.out_shape = n_emb
+        self.conv = nn.Sequential(
+                        nn.Conv2d(4, 16, kernel_size = [12,3], stride = [3,1], padding = [11,1]),
+                        nn.BatchNorm2d(16),
+                        nn.ReLU())
+        self.senet1 = self._make_layer(block, 16, layers[0], 'se_net', 2)
+        self.resnet1 = self._make_layer(block, 64, layers[1], 'resnet', 2)
+        self.senet2 = self._make_layer(block, 64, layers[2], 'se_net', 2)
+        self.resnet2 = self._make_layer(block, 128, layers[3], 'resnet', 2)
 
-            self.tdd = nn.Sequential(
-                            nn.Conv2d(1, self.out_shape, (256, 1)),
-                            nn.ReLU(),
+        self.tdd = nn.Sequential(
+                        nn.Conv2d(1, self.out_shape, (256, 1)),
+                        nn.ReLU(),
+        )
+
+    def _make_layer(self, block, planes, blocks, net_type, stride=1):
+        downsample = None
+        if stride != 1 or self.inplanes != planes:
+            downsample = nn.Sequential(
+                nn.Conv2d(self.inplanes, planes, kernel_size=1, stride=stride),
+                nn.BatchNorm2d(planes),
             )
+        layers = []
+        layers.append(block(self.inplanes, planes, stride=stride, downsample=downsample, net_type=net_type))
+        self.inplanes = planes
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes, net_type=net_type))
 
-        def _make_layer(self, block, planes, blocks, net_type, stride=1):
-            downsample = None
-            if stride != 1 or self.inplanes != planes:
-                downsample = nn.Sequential(
-                    nn.Conv2d(self.inplanes, planes, kernel_size=1, stride=stride),
-                    nn.BatchNorm2d(planes),
-                )
-            layers = []
-            layers.append(block(self.inplanes, planes, stride=stride, downsample=downsample, net_type=net_type))
-            self.inplanes = planes
-            for i in range(1, blocks):
-                layers.append(block(self.inplanes, planes, net_type=net_type))
+        return nn.Sequential(*layers)
 
-            return nn.Sequential(*layers)
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.senet1(x)
+        x = self.resnet1(x)
+        x = self.senet2(x)
+        x = self.resnet2(x)
+        
+        x = x.reshape(x.shape[0],1,-1,x.shape[-1])
+        x = self.tdd(x).reshape(self.out_shape,-1)
 
-        def forward(self, x):
-            x = self.conv(x)
-            x = self.senet1(x)
-            x = self.resnet1(x)
-            x = self.senet2(x)
-            x = self.resnet2(x)
-            
-            x = x.reshape(x.shape[0],1,-1,x.shape[-1])
-            x = self.tdd(x).reshape(self.out_shape,-1)
-
-            return x
+        return x
