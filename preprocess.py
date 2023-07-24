@@ -10,7 +10,7 @@ from spleeter.separator import Separator
 from spleeter.audio.adapter import AudioAdapter
 
 from util import load_audio, load_config
-from LyricsAlignment import extract_phonemegram, align
+from LyricsAlignment.wrapper import extract_phonemegram, align
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
