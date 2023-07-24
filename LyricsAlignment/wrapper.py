@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .utils import *
+from . import utils
 from .model import train_audio_transforms, AcousticModel, BoundaryDetection
 
 np.random.seed(7)

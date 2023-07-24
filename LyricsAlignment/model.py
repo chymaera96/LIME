@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torchaudio
 import warnings
 
-from utils import notes_to_pc
+from .utils import notes_to_pc
 
 # following FFT parameters are designed for a 22.5k sampling rate
 sr = 22050
