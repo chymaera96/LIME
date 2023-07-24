@@ -6,7 +6,9 @@ def load_audio(path, sr=16000):
     try:
         audio, sr = librosa.load(path, sr=sr, mono=False)
     except Exception as e:
-        audio, sr = sf.read(path)    
+        print(e)
+        audio, sr = sf.read(path)  
+        print(audio.shape)
     return audio, sr
 
 def load_config(config_path):

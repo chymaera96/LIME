@@ -26,7 +26,7 @@ def compute_crema_pcp(audio, sr, model, feature_rate=2):
 def extract_stems(audio):  
     separator = Separator('spleeter:4stems')
     stems = separator.separate(audio)
-    print(stems['vocals'].shape)
+    # print(stems['vocals'].shape)
     stems = {k: v.T.mean(axis=0) for k, v in stems.items()}
     return stems
 
@@ -65,8 +65,6 @@ def main():
             print(f'{name} does not exist in {cfg["audio_dir"]}')
             continue
         path_list = glob.glob(os.path.join(artists_dir, '**/*.*'))
-        # print(artists_dir)
-        # print(path_list)
         fpaths.extend(path_list)
 
     print(f'{len(fpaths)} paths loaded!')
@@ -105,7 +103,7 @@ def main():
             print(e)
             continue
         
-        print(stems['vocals'].shape)
+        # print(stems['vocals'].shape)
         pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=True)
         pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(pgram, pgram_path)
