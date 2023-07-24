@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
 def compute_crema_pcp(audio, sr, model, feature_rate=2):
+    crema_model = crema.models.chord.ChordModel()
     out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
     crema_pcp = 1/(1 + np.exp(-pcp))
@@ -70,7 +71,6 @@ def main():
     print(f'{len(fpaths)} paths loaded!')
 
     # Preprocessing code
-    crema_model = crema.models.chord.ChordModel()
     columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
     if not os.path.exists(cfg['metadata_path']):
         metadata = []
