@@ -106,7 +106,7 @@ def main():
             continue
         
         # print(stems['vocals'].shape)
-        pgram = extract_phonemegram(stems['vocals'], method='Baseline', cuda=True)
+        pgram = extract_phonemegram(stems['vocals'], method='Baseline', cuda=False)
         pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(pgram, pgram_path)
 
