@@ -1,0 +1,19 @@
+# cfg for preprocess.py
+
+audio_exts : ['wav','mp3','m4a',flac','aiff']
+
+# Input data paths
+artists : 'data/artist_names_c4dm.txt'
+metadata_path : 'data/metadata.csv'
+audio_path : 'import/c4dm-datasets/C4DM Music Collection'
+
+# Processed data paths
+cqt_dir : 'data/cqt'
+crema_dir : 'data/crema_pcp'
+pgram_dir : 'data/pgram'
+lyrics_dir : 'data/lyrics'
+
+# Preprocessing parameters
+sr_h : 22050
+sr_l : 16000
+hop_length : 512

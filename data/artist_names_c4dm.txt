@@ -1,0 +1,59 @@
+Abba	looks ok	19	
+Annie Lenox	looks ok	11
+BB King	looks ok	16
+Bee Gees	looks ok	3
+Bjork	one live recording	13
+Bob Dylan	looks ok	24
+Chapman Tracy	looks ok	11
+Coldplay	repeated songs	14	
+David Bowie	looks ok	12
+Dolly Parton	looks ok	20
+Don McLean	looks ok	17
+Eagles	looks ok	33
+Elton John	ok	2
+Enrique Iglesias	one non-english	2
+Fleetwood Mac	repeated songs	30
+Frank Sinatra	looks ok	46
+Gary Numan	looks ok	16
+Gwen Stefani	ok	1
+INXS	looks ok	16
+Janet Jackson	ok	3
+John Lennon	ok	3
+Joni Mitchell	looks ok	19
+Lady GaGa	ok	1
+Led Zeppelin	all songs repeated twice	9	
+Leonard Cohen	looks ok	12
+Lou Reed	looks ok	13
+Madonna	few radio edits	16
+MEAT LOAF	looks ok	11
+Melanie B	ok	1
+Melanie C	ok	1
+Michael Jackson	looks ok	37
+Neil Young	looks ok	24
+Nine Inch Nails	looks ok	22
+Paul McCartney	ok	1
+Pink Floyd	check for lyrics	10
+Prince	looks ok	11
+Radiohead	looks ok	12
+Rod Stewart	ok	1
+Ronan Keating	ok	1
+Sex Pistols	looks ok	12
+Shania Twain	ok 	1
+Simon and Garfunkel	one non-english song	13	
+Spice Girls	ok	2
+Sugababes	ok	1
+Sum 41	ok	1
+Steve Miller Band	looks ok	22	
+Stevie Wonder	looks ok	38
+The Beach Boys	looks ok	49
+The Doors	looks ok	19
+The Killers	ok	1
+The Police	looks ok	11
+The Who	looks ok	24
+Tom Waits	looks ok	12
+Robbie Williams	looks ok	6
+The Rolling Stones	looks ok	28
+U2	looks ok	19
+Various Artists	looks ok	20
+Velvet Underground Nico	looks ok	11
+Zutons	looks ok	13
