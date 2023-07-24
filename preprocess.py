@@ -80,16 +80,17 @@ def main():
 
     for ix, fpath in enumerate(fpaths):
 
-        # if ix % 10 == 0:
-        print(f'Processing {ix} of {len(fpaths)}...')
-        print(fpath)
+        if ix % 10 == 0:
+            print(f'Processing {ix} of {len(fpaths)}...')
+
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
+        if any([fpath == m['audio_path'] for m in metadata]):
+            continue
+
         try:
-            print("Loading audio...")
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
             audio_length = len(audio)/sr_h
-            print(f'Audio shape: {audio.shape}')
         except Exception as e:
             print(e)
             continue
@@ -106,7 +107,7 @@ def main():
             continue
         
         # print(stems['vocals'].shape)
-        pgram = extract_phonemegram(stems['vocals'], method='Baseline', cuda=False)
+        pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=False)
         pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(pgram, pgram_path)
 
@@ -118,14 +119,13 @@ def main():
         torch.save(cqt, cqt_path)
 
         # Not storing lyrics as of now
-        lyrics_path = ''
+        lyrics_path = np.nan
 
         metadata.append(dict(zip(columns, [fpath, audio_length, lyrics_path, cqt_path, crema_path, pgram_path])))
 
         # Checking if the metadata is being saved correctly
         df = pd.DataFrame(metadata)
         df.to_csv(cfg['metadata_path'], index=False)
-        break
 
 if __name__ == '__main__':
     main()
