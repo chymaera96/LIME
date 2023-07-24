@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
 def compute_crema_pcp(audio, sr, model, feature_rate=2):
-    out = model.outputs(y=audio,sr=sr)
+    out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
     crema_pcp = 1/(1 + np.exp(-pcp))
     fr = crema_pcp.shape[1]/len(audio)*sr
@@ -81,8 +81,8 @@ def main():
 
     for ix, fpath in enumerate(fpaths):
 
-        if ix % 10 == 0:
-            print(f'Processing {ix} of {len(fpaths)}...')
+        # if ix % 10 == 0:
+        print(f'Processing {ix} of {len(fpaths)}...')
 
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
