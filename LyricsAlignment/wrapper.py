@@ -56,7 +56,7 @@ def extract_phonemegram(audio, method="Baseline", cuda=True):
     ).to(device)
 
     print("Loading acoustic model from checkpoint...")
-    state = utils.load_model(ac_model, "./checkpoints/checkpoint_{}".format(model_type), cuda=(device=="gpu"))
+    state = utils.load_model(ac_model, "./LyricsAlignment/checkpoints/checkpoint_{}".format(model_type), cuda=(device=="gpu"))
     ac_model.eval()
 
     print("Computing phoneme posteriorgram...")
