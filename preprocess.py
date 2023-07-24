@@ -83,7 +83,7 @@ def main():
         if ix % 10 == 0:
             print(f'Processing {ix} of {len(glob.glob(os.path.join(cfg["audio_dir"], "*.*")))}...')
 
-        if fpath.split['.'][-1] not in cfg['audio_exts']:
+        if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
         try:
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
