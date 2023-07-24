@@ -15,7 +15,7 @@ from LyricsAlignment.wrapper import extract_phonemegram, align
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
-def compute_crema_pcp(audio, sr, model, feature_rate=2):
+def compute_crema_pcp(audio, sr, feature_rate=2):
     model = crema.models.chord.ChordModel()
     out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
@@ -95,7 +95,7 @@ def main():
             print(e)
             continue
 
-        crema_pcp = compute_crema_pcp(audio, sr_h, crema_model)
+        crema_pcp = compute_crema_pcp(audio, sr_h)
         crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(crema_pcp, crema_path)
 
