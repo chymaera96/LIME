@@ -1,5 +1,5 @@
 Abba	looks ok	19	
-Annie Lenox	looks ok	11
+Annie Lennox	looks ok	11
 BB King	looks ok	16
 Bee Gees	looks ok	3
 Bjork	one live recording	13
@@ -55,5 +55,5 @@ Robbie Williams	looks ok	6
 The Rolling Stones	looks ok	28
 U2	looks ok	19
 Various Artists	looks ok	20
-Velvet Underground Nico	looks ok	11
+Velvet Underground  Nico	looks ok	11
 Zutons	looks ok	13
