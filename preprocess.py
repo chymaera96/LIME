@@ -65,11 +65,10 @@ def main():
             continue
         path_list = glob.glob(os.path.join(artists_dir, '**/*.*'))
         # print(artists_dir)
-        print(path_list)
+        # print(path_list)
         fpaths.extend(path_list)
 
-    print('Paths loaded!')
-    print(fpaths)
+    print(f'{path_list} paths loaded!')
 
     # Preprocessing code
     crema_model = crema.models.chord.ChordModel()
