@@ -58,6 +58,7 @@ def main():
     df = pd.read_csv(cfg['artists'], sep='\t', header=None)
     artists = list(df[0])
     fpaths = []
+    print('Loading audio paths...')
     for name in artists:
         artists_dir = os.path.join(cfg['audio_dir'], name)
         if not os.path.exists(artists_dir):
@@ -65,7 +66,8 @@ def main():
             continue
         path_list = glob.glob(os.path.join(artists_dir, '*.*'))
         fpaths.extend(path_list)
-        
+
+    print('Paths loaded!')
 
 
     # Preprocessing code
