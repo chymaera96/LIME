@@ -1,3 +1,4 @@
 torch
 librosa
 pyYAML
+crema

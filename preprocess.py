@@ -52,7 +52,6 @@ def compute_cqt_spectrogram(stems, cfg):
 def main():
     args = parser.parse_args()
     cfg = load_config(args.config)
-    crema_model = crema.models.chord.ChordModel()
 
     # Loading paths from artist text file
     df = pd.read_csv(cfg['artists'], sep='\t', header=None)
@@ -71,6 +70,7 @@ def main():
 
 
     # Preprocessing code
+    crema_model = crema.models.chord.ChordModel()
     columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
     if not os.path.exists(cfg['metadata_path']):
         metadata = []
