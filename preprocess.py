@@ -67,7 +67,7 @@ def main():
         fpaths.extend(path_list)
 
     print('Paths loaded!')
-
+    print(fpaths)
 
     # Preprocessing code
     crema_model = crema.models.chord.ChordModel()
@@ -78,10 +78,10 @@ def main():
         df = pd.read_csv(cfg['metadata_path'])
         metadata = df.to_dict('records')
 
-    for ix, fpath in enumerate(glob.glob(os.path.join(cfg['audio_dir'], '*.*'))):
+    for ix, fpath in enumerate(fpaths):
 
         if ix % 10 == 0:
-            print(f'Processing {ix} of {len(glob.glob(os.path.join(cfg["audio_dir"], "*.*")))}...')
+            print(f'Processing {ix} of {fpaths}...')
 
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
