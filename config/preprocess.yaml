@@ -1,6 +1,6 @@
 # cfg for preprocess.py
 
-audio_exts : ['wav','mp3','m4a',flac','aiff']
+audio_exts : ['wav','mp3','m4a','flac','aiff']
 
 # Input data paths
 artists : 'data/artist_names_c4dm.txt'
