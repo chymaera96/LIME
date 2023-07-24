@@ -68,7 +68,7 @@ def main():
         # print(path_list)
         fpaths.extend(path_list)
 
-    print(f'{path_list} paths loaded!')
+    print(f'{len(fpaths)} paths loaded!')
 
     # Preprocessing code
     crema_model = crema.models.chord.ChordModel()
