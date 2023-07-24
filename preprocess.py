@@ -102,7 +102,8 @@ def main():
         except Exception as e:
             print(e)
             continue
-
+        
+        print(stems['vocals'].shape)
         pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=True)
         pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(pgram, pgram_path)
