@@ -1,0 +1,15 @@
+future
+numpy
+librosa
+soundfile
+musdb
+museval
+h5py
+tqdm
+torch
+torchaudio
+tensorboard
+sortedcontainers
+youtube_dl
+g2p-en
+spleeter
