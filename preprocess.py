@@ -86,8 +86,10 @@ def main():
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
         try:
+            print("Loading audio...")
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
             audio_length = len(audio)/sr_h
+            print(f'Audio shape: {audio.shape}')
         except Exception as e:
             print(e)
             continue
