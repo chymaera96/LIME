@@ -83,7 +83,7 @@ def main():
 
         # if ix % 10 == 0:
         print(f'Processing {ix} of {len(fpaths)}...')
-
+        print(fpath)
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
         try:
