@@ -64,9 +64,9 @@ def main():
             print(f'{name} does not exist in {cfg["audio_dir"]}')
             continue
         path_list = glob.glob(os.path.join(artists_dir, '**/.*'))
-        print()
-        print(path_list)
-        fpaths.extend(path_list)
+        print(artists_dir)
+        # print(path_list)
+        # fpaths.extend(path_list)
 
     print('Paths loaded!')
     print(fpaths)
