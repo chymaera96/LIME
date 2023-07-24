@@ -25,8 +25,8 @@ def compute_crema_pcp(audio, sr, model, feature_rate=2):
 
 def extract_stems(audio):  
     separator = Separator('spleeter:4stems')
-    stems = separator.separate(audio)
-    # print(stems['vocals'].shape)
+    stems = separator.separate(audio.T)
+    print(stems['vocals'].shape)
     stems = {k: v.T.mean(axis=0) for k, v in stems.items()}
     return stems
 
