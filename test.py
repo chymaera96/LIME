@@ -74,7 +74,7 @@ def main():
         path_list = glob.glob(os.path.join(artists_dir, '**/*.*'))
         fpaths.extend(path_list)
 
-    print(f'{len(fpaths)} paths loaded!')
+    # print(f'{len(fpaths)} paths loaded!')
 
     # Preprocessing code
     columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
@@ -103,7 +103,6 @@ def main():
         except Exception as e:
             print(e)
             continue
-
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
         break
         crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
