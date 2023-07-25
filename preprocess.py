@@ -98,7 +98,7 @@ def main():
             print(e)
             continue
 
-        crema_pcp = compute_crema_pcp(audio, model, sr_h)
+        crema_pcp = compute_crema_pcp(audio, sr_h, model)
         crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(crema_pcp, crema_path)
 
