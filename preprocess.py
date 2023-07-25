@@ -8,6 +8,7 @@ import librosa
 import crema
 from spleeter.separator import Separator
 from spleeter.audio.adapter import AudioAdapter
+import tensorflow as tf
 
 from util import load_audio, load_config
 from LyricsAlignment.wrapper import extract_phonemegram, align
@@ -16,13 +17,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
 def compute_crema_pcp(audio, sr, model=None, feature_rate=2):
+    tf.keras.backend.clear_session()
     model = crema.models.chord.ChordModel()
     out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
     crema_pcp = 1/(1 + np.exp(-pcp))
     fr = crema_pcp.shape[1]/len(audio)*sr
     crema_rs = librosa.resample(crema_pcp, orig_sr=fr, target_sr=feature_rate)
-    del model
+    # del model
     return crema_rs
 
 def extract_stems(audio):  
