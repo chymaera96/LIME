@@ -18,7 +18,7 @@ parser.add_argument('--config', type=str, default='config/config0.yaml', help='c
 
 def compute_crema_pcp(audio, sr, model=None, feature_rate=2):
     print('Computing crema_pcp...')
-    print(f'audio shape: {audio.shape}')
+    print(f'audio shape: {audio.mean(axis=0).shape}')
     out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
     # tf.keras.backend.clear_session()
