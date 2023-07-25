@@ -9,25 +9,13 @@ import crema
 from spleeter.separator import Separator
 from spleeter.audio.adapter import AudioAdapter
 import tensorflow as tf
+import warnings
 
 from util import load_audio, load_config
 from LyricsAlignment.wrapper import extract_phonemegram, align
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
-
-def compute_crema_pcp(audio, sr, model=None, feature_rate=2):
-    model = crema.models.chord.ChordModel()
-    out = model.outputs(y=audio.mean(axis=0),sr=sr)
-    pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
-    tf.keras.backend.clear_session()
-
-    crema_pcp = 1/(1 + np.exp(-pcp))
-    fr = crema_pcp.shape[1]/len(audio)*sr
-    crema_rs = librosa.resample(crema_pcp, orig_sr=fr, target_sr=feature_rate)
-
-    del model
-    return crema_rs
 
 def extract_stems(audio):  
     separator = Separator('spleeter:4stems')
@@ -65,56 +53,50 @@ def main():
     artists = list(df[0])
     fpaths = []
     print('Loading audio paths...')
-    for name in artists:
-        artists_dir = os.path.join(cfg['audio_dir'], name)
-        if not os.path.exists(artists_dir):
-            print(f'{name} does not exist in {cfg["audio_dir"]}')
-            continue
-        path_list = glob.glob(os.path.join(artists_dir, '**/*.*'))
-        fpaths.extend(path_list)
 
-    print(f'{len(fpaths)} paths loaded!')
 
     # Preprocessing code
     columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
-    if not os.path.exists(cfg['metadata_path']):
-        metadata = []
-    else:
-        df = pd.read_csv(cfg['metadata_path'])
-        metadata = df.to_dict('records')
+    df = pd.read_csv(cfg['metadata_path'])
+    fpaths = list(df['audio_path'])
+    metadata = df.to_dict('records')
 
 
     for ix, fpath in enumerate(fpaths):
 
         if ix % 10 == 0:
             print(f'Processing {ix} of {len(fpaths)}...')
+            if ix != 0:
+                df = pd.DataFrame(metadata)
+                df.to_csv(cfg['metadata_path'], index=False)
 
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
-        if any([fpath == m['audio_path'] for m in metadata]):
-            continue
+        # if any([fpath == m['audio_path'] for m in metadata]):
+        #     continue
 
         try:
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
             audio_length = len(audio)/sr_h
+            if audio_length > 360:
+                continue
         except Exception as e:
             print(e)
             continue
 
-        crema_pcp = compute_crema_pcp(audio, sr_h)
-        crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
-        torch.save(crema_pcp, crema_path)
-
         try:
-            stems = extract_stems(audio)
-
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                stems = extract_stems(audio)
         except Exception as e:
             print(e)
             continue
         
-        # print(stems['vocals'].shape)
-        pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=False)
         pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
+        if os.path.exists(pgram_path):
+            continue
+        
+        pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=False)
         torch.save(pgram, pgram_path)
 
         # Downsample stems to 16 kHz
@@ -124,14 +106,13 @@ def main():
         cqt_path = os.path.join(cfg['cqt_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(cqt, cqt_path)
 
-        # Not storing lyrics as of now
-        lyrics_path = np.nan
+        # Add pgram and cqt paths to metadata based on audio path
+        for m in metadata:
+            if m['audio_path'] == fpath:
+                m['cqt_path'] = cqt_path
+                m['pgram_path'] = pgram_path
 
-        metadata.append(dict(zip(columns, [fpath, audio_length, lyrics_path, cqt_path, crema_path, pgram_path])))
 
-        # Checking if the metadata is being saved correctly
-        df = pd.DataFrame(metadata)
-        df.to_csv(cfg['metadata_path'], index=False)
 
 if __name__ == '__main__':
     main()
