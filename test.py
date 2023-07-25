@@ -17,7 +17,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
 def compute_crema_pcp(audio, sr, model=None, feature_rate=2):
-    
+    print('Computing crema_pcp...')
+    print(f'audio shape: {audio.shape}')
     out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
     # tf.keras.backend.clear_session()
@@ -104,6 +105,7 @@ def main():
             continue
 
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
+        break
         crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
         torch.save(crema_pcp, crema_path)
 
