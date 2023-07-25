@@ -48,12 +48,6 @@ def main():
     args = parser.parse_args()
     cfg = load_config(args.config)
 
-    # Loading paths from artist text file
-    df = pd.read_csv(cfg['artists'], sep='\t', header=None)
-    artists = list(df[0])
-    fpaths = []
-    print('Loading audio paths...')
-
 
     # Preprocessing code
     columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
