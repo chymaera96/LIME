@@ -15,7 +15,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
 def compute_crema_pcp(audio, sr, model=None, feature_rate=2):
-    print(f'audio shape: {audio.shape}')
     out = model.outputs(y=audio.mean(axis=0),sr=sr)
     pcp = out['chord_pitch'].T + out['chord_root'].T[:-1] + out['chord_bass'].T[:-1]
     crema_pcp = 1/(1 + np.exp(-pcp))
@@ -71,6 +70,7 @@ def main():
         try:
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
             audio_length = audio.mean(axis=0).shape[0]/sr_h
+            print(f"Audio length: {audio_length}")
         except Exception as e:
             print(e)
             continue
