@@ -55,11 +55,11 @@ def extract_phonemegram(audio, method="Baseline", cuda=True):
         hparams['n_feats'], hparams['stride'], hparams['dropout']
     ).to(device)
 
-    print("Loading acoustic model from checkpoint...")
+    # print("Loading acoustic model from checkpoint...")
     state = utils.load_model(ac_model, "./LyricsAlignment/checkpoints/checkpoint_{}".format(model_type), cuda=(device=="gpu"))
     ac_model.eval()
 
-    print("Computing phoneme posteriorgram...")
+    # print("Computing phoneme posteriorgram...")
 
     # reshape input, prepare mel
     x = audio.reshape(1, 1, -1)
@@ -95,7 +95,7 @@ def align(audio, words, lyrics_p, idx_word_p, idx_line_p, method="Baseline", cud
     else:
         model_type = method
         bdr_flag = False
-    print("Model: {} BDR?: {}".format(model_type, bdr_flag))
+    # print("Model: {} BDR?: {}".format(model_type, bdr_flag))
 
     # prepare acoustic model params
     if model_type == "Baseline":
@@ -122,11 +122,11 @@ def align(audio, words, lyrics_p, idx_word_p, idx_line_p, method="Baseline", cud
         hparams['n_feats'], hparams['stride'], hparams['dropout']
     ).to(device)
 
-    print("Loading acoustic model from checkpoint...")
+    # print("Loading acoustic model from checkpoint...")
     state = utils.load_model(ac_model, "./checkpoints/checkpoint_{}".format(model_type), cuda=(device=="gpu"))
     ac_model.eval()
 
-    print("Computing phoneme posteriorgram...")
+    # print("Computing phoneme posteriorgram...")
 
     # reshape input, prepare mel
     x = audio.reshape(1, 1, -1)
