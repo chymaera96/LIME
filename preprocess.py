@@ -17,8 +17,8 @@ from LyricsAlignment.wrapper import extract_phonemegram, align
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
 
-def extract_stems(audio):  
-    separator = Separator('spleeter:4stems')
+def extract_stems(audio, separator=None):  
+    # separator = Separator('spleeter:4stems')
     stems = separator.separate(audio.T)
     print(stems['vocals'].shape)
     stems = {k: v.T.mean(axis=0) for k, v in stems.items()}
@@ -54,7 +54,7 @@ def main():
     df = pd.read_csv(cfg['metadata_path'])
     fpaths = list(df['audio_path'])
     metadata = df.to_dict('records')
-
+    separator = Separator('spleeter:4stems')
 
     for ix, fpath in enumerate(fpaths):
 
@@ -81,7 +81,7 @@ def main():
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                stems = extract_stems(audio)
+                stems = extract_stems(audio, separator=separator)
         except Exception as e:
             print(e)
             continue
