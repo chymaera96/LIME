@@ -20,7 +20,7 @@ parser.add_argument('--config', type=str, default='config/config0.yaml', help='c
 def extract_stems(audio, separator=None):  
     # separator = Separator('spleeter:4stems')
     stems = separator.separate(audio.T)
-    print(stems['vocals'].shape)
+    # print(stems['vocals'].shape)
     stems = {k: v.T.mean(axis=0) for k, v in stems.items()}
     return stems
 
