@@ -16,4 +16,4 @@ lyrics_dir : 'data/lyrics'
 # Preprocessing parameters
 sr_h : 22050
 sr_l : 16000
-hop_length : 512
+hop_length : 500

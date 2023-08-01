@@ -25,8 +25,10 @@ def extract_stems(audio, separator=None):
     return stems
 
 
-def extract_lyrics_vectors(ala_file):
+def extract_lyrics_vectors(ala_file, max_dur=5.0):
     df = pd.read_csv(ala_file, header=None)
+    df = df[df[1] - df[0] <= max_dur] # This may remove some time frames at the end; handled at data.py
+    df = df.reset_index(drop=True)
     s_t = np.round(list(df[0]*2))
     e_t = np.round(list(df[1]*2))
     words = df[2]

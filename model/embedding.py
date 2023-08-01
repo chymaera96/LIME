@@ -69,7 +69,7 @@ class EmbeddingNetwork(nn.Module):
         self.inplanes = 16
         self.out_shape = n_emb
         self.conv = nn.Sequential(
-                        nn.Conv2d(4, 16, kernel_size = [12,3], stride = [3,1], padding = [11,1]),
+                        nn.Conv2d(4, 16, kernel_size = [12,2], stride = [3,1], padding = [11,0]),
                         nn.BatchNorm2d(16),
                         nn.ReLU())
         self.senet1 = self._make_layer(block, 16, layers[0], 'se_net', 2)
