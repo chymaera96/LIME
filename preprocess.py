@@ -5,7 +5,6 @@ import argparse
 import glob
 import pandas as pd
 import librosa
-import crema
 from spleeter.separator import Separator
 from spleeter.audio.adapter import AudioAdapter
 import tensorflow as tf
@@ -26,17 +25,18 @@ def extract_stems(audio, separator=None):
 
 
 def extract_lyrics_vectors(ala_file=None, ala=None, max_dur=5.0):
-    if ala is not None:
-        df = ala
-    else:
-        df = pd.read_csv(ala_file, header=['start','end','text'])
-    df = df[df['end'] - df['start'] <= max_dur] # This may remove some time frames at the end; handled at data.py
+    if ala is None:
+        ala = pd.read_csv(ala_file, header=['start','end','text'])
+    
+    ala = ala.sort_values(by=['start'], ascending=True)
+    df = ala[ala['end'] - ala['start'] <= max_dur]
+    df = df[df['end'] - df['start'] >= 0.0]
     df = df.reset_index(drop=True)
     s_t = np.round(list(df['start']*2))
     e_t = np.round(list(df['end']*2))
     texts = df['text']
     vocab = list(set(texts))
-    lvecs = np.zeros((len(vocab),int(e_t[-1])))
+    lvecs = np.zeros((len(vocab),int(np.round(list(ala['end']*2))[-1])))
     inv_w_ix = {k:v for v, k in enumerate(vocab)}
 
     for i in range(len(df)):
