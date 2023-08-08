@@ -25,20 +25,23 @@ def extract_stems(audio, separator=None):
     return stems
 
 
-def extract_lyrics_vectors(ala_file, max_dur=5.0):
-    df = pd.read_csv(ala_file, header=None)
-    df = df[df[1] - df[0] <= max_dur] # This may remove some time frames at the end; handled at data.py
+def extract_lyrics_vectors(ala_file=None, ala=None, max_dur=5.0):
+    if ala is not None:
+        df = ala
+    else:
+        df = pd.read_csv(ala_file, header=['start','end','text'])
+    df = df[df['end'] - df['start'] <= max_dur] # This may remove some time frames at the end; handled at data.py
     df = df.reset_index(drop=True)
-    s_t = np.round(list(df[0]*2))
-    e_t = np.round(list(df[1]*2))
-    words = df[2]
-    vocab = list(set(words))
+    s_t = np.round(list(df['start']*2))
+    e_t = np.round(list(df['end']*2))
+    texts = df['text']
+    vocab = list(set(texts))
     lvecs = np.zeros((len(vocab),int(e_t[-1])))
     inv_w_ix = {k:v for v, k in enumerate(vocab)}
 
     for i in range(len(df)):
         for j in range(int(s_t[i]),int(e_t[i]) + 1):
-            lvecs[inv_w_ix[df[2][i]], j - 1] = 1
+            lvecs[inv_w_ix[df['text'][i]], j - 1] = 1
     return lvecs
 
 def compute_cqt_spectrogram(stems, cfg):

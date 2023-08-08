@@ -68,7 +68,7 @@ class LIMEDataset(Dataset):
             return self[idx + 1]
         
         
-        if self.transform:
+        if self.transform is not None:
             cqt = self.transform(cqt)
 
         # Checking number of frames in crema_pcp and lyr_enc
@@ -96,7 +96,7 @@ class LIMEDataset(Dataset):
         crema_SSM = torch.from_numpy(crema_SSM).to(torch.float32)
         lyr_SSM = torch.from_numpy(lyr_SSM).to(torch.float32)
 
-        return cqt, crema_SSM, lyr_SSM
+        return cqt, lyr_SSM, crema_SSM
 
 
         
