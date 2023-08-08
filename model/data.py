@@ -73,7 +73,7 @@ class LIMEDataset(Dataset):
 
         # Checking number of frames in crema_pcp and lyr_enc
         if crema_pcp.shape[1] != lyr_enc.shape[1]:
-            # print(f"crema_pcp.shape[1] - lyr_enc.shape[1] = {crema_pcp.shape[1] - lyr_enc.shape[1]}")
+            print(f"crema_pcp.shape[1] - lyr_enc.shape[1] = {crema_pcp.shape[1] - lyr_enc.shape[1]}")
             if crema_pcp.shape[1] < lyr_enc.shape[1]:
                 crop = (lyr_enc.shape[1] - crema_pcp.shape[1]) // 2
                 lyr_enc = lyr_enc[:, crop:crop+crema_pcp.shape[1]]

@@ -24,7 +24,7 @@ def extract_stems(audio, separator=None):
     return stems
 
 
-def extract_lyrics_vectors(ala_file=None, ala=None, max_dur=5.0):
+def extract_lyrics_vectors(ala_file=None, ala=None, size=None, max_dur=5.0):
     if ala is None:
         ala = pd.read_csv(ala_file, header=['start','end','text'])
     
@@ -36,7 +36,10 @@ def extract_lyrics_vectors(ala_file=None, ala=None, max_dur=5.0):
     e_t = np.round(list(df['end']*2))
     texts = df['text']
     vocab = list(set(texts))
-    lvecs = np.zeros((len(vocab),int(np.round(list(ala['end']*2))[-1])))
+    if size is None:
+        lvecs = np.zeros((len(vocab),int(np.round(list(ala['end']*2))[-1])))
+    else:
+        lvecs = np.zeros((len(vocab),int(np.ceil(size*2))))
     inv_w_ix = {k:v for v, k in enumerate(vocab)}
 
     for i in range(len(df)):

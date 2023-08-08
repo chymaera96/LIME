@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import torch
+import torch.nn.functional as F
 import librosa
 import soundfile as sf
 import yaml
@@ -34,3 +35,34 @@ def save_ckp(state,model_name,model_folder,text):
         print("Creating checkpoint directory...")
         os.mkdir(model_folder)
     torch.save(state, "{}/model_{}_{}.pth".format(model_folder, model_name, text))
+
+def diagonal_smoothing(matrix_batch, window_size):
+
+    batch_size, seq_len, _ = matrix_batch.shape
+    device = matrix_batch.device
+
+    # Define the custom kernel for forward diagonal median filtering
+    kernel_forward = torch.eye(window_size, window_size, device=device)
+    kernel_forward /= window_size
+
+    # Perform 2D convolution with the custom kernel
+    smoothed_batch = F.conv2d(matrix_batch.view(batch_size, 1, seq_len, seq_len), kernel_forward.view(1, 1, window_size, window_size), padding=(window_size // 2, window_size // 2))
+
+    return smoothed_batch.view(batch_size, seq_len, seq_len)
+
+def flip(matrix_batch):
+    flipped_batch = torch.flip(matrix_batch, [1, 2])
+    return flipped_batch
+
+def compute_smooth_ssm(emb_batch, thresh=None, L=5):
+    ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
+
+    # Forward-backward diagonal smoothing
+    ssm_f = diagonal_smoothing(ssm, L)
+    ssm_b = flip(diagonal_smoothing(flip(ssm_f), L))
+    ssm = flip(ssm_b)
+    
+    if thresh is not None:
+        ssm[ssm < thresh] = 0
+
+    return ssm

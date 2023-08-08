@@ -39,9 +39,10 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         with torch.no_grad():
             S = augment(S) if augment is not None else S
         output = model(S)
-
-        loss1 = F.mse_loss(output, I1)
-        loss2 = F.mse_loss(output, I2)
+        emb_ssm = compute_smooth_ssm(output)
+        assert emb_ssm.shape == I1.shape == I2.shape
+        loss1 = F.mse_loss(emb_ssm, I1)
+        loss2 = F.mse_loss(emb_ssm, I2)
         loss = loss1 + cfg['gamma'] * loss2
 
         loss.backward()
