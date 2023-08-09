@@ -17,7 +17,8 @@ from preprocess_crema import compute_crema_pcp
 from util import load_audio, load_config
 
 def ala_extractor(dali_data, annot_path, audio_path):
-    entry = dali_data[annot_path.split('.gz')[0]]
+    id = annot_path.split('/')[-1].split('.')[0]
+    entry = dali_data[id]
     df = pd.DataFrame.from_dict(entry.annotations['annot']['words'])
     df = df[['text','time']]
     time = pd.DataFrame(df['time'].to_list(), columns=['start','end'])
