@@ -113,7 +113,11 @@ def main():
                 m['cqt_path'] = cqt_path
                 m['pgram_path'] = pgram_path
 
-
+    df = pd.DataFrame(metadata)
+    # Sort df by audio length
+    df = df.sort_values(by=['audio_length'], ascending=True)
+    df = df.reset_index(drop=True)
+    df.to_csv(cfg['metadata_path'], index=False)
 
 if __name__ == '__main__':
     main()
