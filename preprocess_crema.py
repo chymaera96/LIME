@@ -69,7 +69,8 @@ def main():
 
         try:
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
-            audio_length = audio.mean(axis=0).shape[0]/sr_h
+            audio = audio.mean(axis=0)
+            audio_length = audio.shape[0]/sr_h
             if audio_length > 360:
                 continue
             # print(f"Audio length: {audio_length}")

@@ -71,7 +71,9 @@ def main():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 audio, sr_h = load_audio(audio_path, sr=cfg['sr_h'])
-            audio_length = audio.mean(axis=0).shape[0]/sr_h
+            audio = audio.mean(axis=0)
+
+            audio_length = audio.shape[0]/sr_h
             if audio_length > 300 or audio_length < 30:
                 continue
 
