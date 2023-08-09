@@ -16,17 +16,13 @@ from preprocess import extract_lyrics_vectors
 from preprocess_crema import compute_crema_pcp
 from util import load_audio, load_config
 
-def ala_extractor(dali_data, annot_path, audio_path):
+def ala_extractor(dali_data, annot_path, audio_length):
     id = annot_path.split('/')[-1].split('.')[0]
     entry = dali_data[id]
     df = pd.DataFrame.from_dict(entry.annotations['annot']['words'])
     df = df[['text','time']]
     time = pd.DataFrame(df['time'].to_list(), columns=['start','end'])
     ala = pd.concat([time, df['text']], axis = 1)
-    # Extract length of audio
-    audio_length = librosa.get_duration(filename=audio_path)
-    if audio_length > 300 or audio_length < 30:
-        return None
     lvecs = extract_lyrics_vectors(ala=ala, size=audio_length)
     return lvecs
 
@@ -65,19 +61,21 @@ def main():
         if any([audio_path == m['audio_path'] for m in metadata]):
             continue
 
-        lvecs = ala_extractor(dali_data, annot_path, audio_path)
-        if lvecs is None:
-            continue
-        lvec_path = os.path.join(cfg['lvec_dir'], fname.split('.')[0] + '.npy')
-        np.save(lvecs, lvec_path)
-
         try:
             audio, sr_h = load_audio(audio_path, sr=cfg['sr_h'])
             audio_length = audio.mean(axis=0).shape[0]/sr_h
+            if audio_length > 300 or audio_length < 30:
+                continue
 
         except Exception as e:
             print(e)
             continue
+
+        lvecs = ala_extractor(dali_data, annot_path, audio_length)
+        if lvecs is None:
+            continue
+        lvec_path = os.path.join(cfg['lvec_dir'], fname.split('.')[0] + '.npy')
+        np.save(lvecs, lvec_path)
 
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
         crema_path = os.path.join(cfg['crema_dir'], fname.split('.')[0] + '.npy')
