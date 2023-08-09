@@ -1,0 +1,19 @@
+# cfg for preprocess.py
+
+audio_exts : ['wav','mp3','m4a','flac','aiff']
+
+# Input data paths
+metadata_path : 'data/dali.csv'
+dali_subset_flist : 'data/dali_subset.json'
+dali_audio_dir : '/import/c4dm-datasets/DALI_v2.0/audio'
+dali_annot_dir : '/import/c4dm-datasets/DALI_v2.0/annot_tismir'
+
+# Processed data paths
+cqt_dir : 'data/cqt'
+crema_dir : 'data/crema_pcp'
+lvec_dir : 'data/lvec'
+
+# Preprocessing parameters
+sr_h : 22050
+sr_l : 16000
+hop_length : 500

@@ -45,7 +45,7 @@ def main():
         fpaths = json.load(fp)
 
     # Loading DALI annotations
-    dali_data = dali_code.get_the_DALI_dataset(cfg['dali_annot_path'], skip=[], keep=[])
+    dali_data = dali_code.get_the_DALI_dataset(cfg['dali_annot_dir'], skip=[], keep=[])
     # Creating CREMA model
     model = crema.models.chord.ChordModel()
 
