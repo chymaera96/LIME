@@ -105,7 +105,7 @@ def main():
             stems[k] = librosa.resample(v, orig_sr=sr_h, target_sr=cfg['sr_l'])
         cqt = compute_cqt_spectrogram(stems, cfg)
         cqt_path = os.path.join(cfg['cqt_dir'], fpath.split('/')[-1].split('.')[0] + '.npy')
-        np.save(cqt, cqt_path)
+        np.save(cqt_path, cqt)
 
         # Add pgram and cqt paths to metadata based on audio path
         for m in metadata:

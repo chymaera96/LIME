@@ -75,11 +75,11 @@ def main():
         if lvecs is None:
             continue
         lvec_path = os.path.join(cfg['lvec_dir'], fname.split('.')[0] + '.npy')
-        np.save(lvecs, lvec_path)
+        np.save(lvec_path, lvecs)
 
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
         crema_path = os.path.join(cfg['crema_dir'], fname.split('.')[0] + '.npy')
-        np.save(crema_pcp, crema_path)
+        np.save(crema_path, crema_pcp)
 
         cqt_path = ''
         lyrics_path = ''
