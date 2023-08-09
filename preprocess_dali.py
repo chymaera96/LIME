@@ -8,6 +8,7 @@ import json
 import numpy as np
 import argparse
 import glob
+import warnings
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/dali.yaml', help='configuration file')
@@ -66,7 +67,9 @@ def main():
             continue
 
         try:
-            audio, sr_h = load_audio(audio_path, sr=cfg['sr_h'])
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                audio, sr_h = load_audio(audio_path, sr=cfg['sr_h'])
             audio_length = audio.mean(axis=0).shape[0]/sr_h
             if audio_length > 300 or audio_length < 30:
                 continue
