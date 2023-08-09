@@ -62,7 +62,7 @@ def main():
             continue
 
         audio_path = os.path.join(cfg['dali_audio_dir'], fpath.split('.gz')[0] + '.mp3')
-        annot_path = os.path.join(cfg['dali_subset_flist'], fpath)
+        annot_path = os.path.join(cfg['dali_annot_dir'], fpath)
 
         lvecs = ala_extractor(dali_data, annot_path, audio_path)
         if lvecs is None:
