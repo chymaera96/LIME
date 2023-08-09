@@ -12,7 +12,8 @@ import glob
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/dali.yaml', help='configuration file')
 
-from preprocess import extract_lyrics_vectors, compute_crema_pcp
+from preprocess import extract_lyrics_vectors
+from preprocess_crema import compute_crema_pcp
 from util import load_audio, load_config
 
 def ala_extractor(dali_data, annot_path, audio_path):
@@ -44,9 +45,9 @@ def main():
     with open(cfg['dali_subset_flist'], 'r') as fp:
         fpaths = json.load(fp)
 
-    # Loading DALI annotations
+    print('Loading DALI annotations...')
     dali_data = dali_code.get_the_DALI_dataset(cfg['dali_annot_dir'], skip=[], keep=[])
-    # Creating CREMA model
+    print('Creating CREMA model...')
     model = crema.models.chord.ChordModel()
 
     for ix, fpath in enumerate(os.listdir(fpaths)):
