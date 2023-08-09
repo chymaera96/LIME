@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import warnings
-warnings.filterwarnings("ignore")
+warnings.simplefilter("ignore")
 
 
 from util import *

@@ -23,7 +23,11 @@ def ala_extractor(dali_data, annot_path, audio_length):
     df = df[['text','time']]
     time = pd.DataFrame(df['time'].to_list(), columns=['start','end'])
     ala = pd.concat([time, df['text']], axis = 1)
-    lvecs = extract_lyrics_vectors(ala=ala, size=audio_length)
+    try:
+        lvecs = extract_lyrics_vectors(ala=ala, size=audio_length)
+    except IndexError:
+        print(f'audio_length: {audio_length}; id: {id}')
+        return None
     return lvecs
 
     
