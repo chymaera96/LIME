@@ -44,35 +44,35 @@ def main():
 
     # Load DALI subset filenames
     with open(cfg['dali_subset_flist'], 'r') as fp:
-        fpaths = json.load(fp)
+        fnames = json.load(fp)
 
     print('Loading DALI annotations...')
     dali_data = dali_code.get_the_DALI_dataset(cfg['dali_annot_dir'], skip=[], keep=[])
     print('Creating CREMA model...')
     model = crema.models.chord.ChordModel()
 
-    for ix, fpath in enumerate(fpaths):
+    for ix, fname in enumerate(fnames):
 
         if ix % 10 == 0:
-            print(f'Processing {ix} of {len(fpaths)}...')
+            print(f'Processing {ix} of {len(fnames)}...')
             if ix != 0:
                 df = pd.DataFrame(metadata)
                 df.to_csv(cfg['metadata_path'], index=False)
 
-        if any([fpath == m['audio_path'] for m in metadata]):
-            continue
+        audio_path = os.path.join(cfg['dali_audio_dir'], fname.split('.gz')[0] + '.mp3')
+        annot_path = os.path.join(cfg['dali_annot_dir'], fname)
 
-        audio_path = os.path.join(cfg['dali_audio_dir'], fpath.split('.gz')[0] + '.mp3')
-        annot_path = os.path.join(cfg['dali_annot_dir'], fpath)
+        if any([audio_path == m['audio_path'] for m in metadata]):
+            continue
 
         lvecs = ala_extractor(dali_data, annot_path, audio_path)
         if lvecs is None:
             continue
-        lvec_path = os.path.join(cfg['lvec_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
+        lvec_path = os.path.join(cfg['lvec_dir'], fname.split('.')[0] + '.npy')
         np.save(lvecs, lvec_path)
 
         try:
-            audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
+            audio, sr_h = load_audio(audio_path, sr=cfg['sr_h'])
             audio_length = audio.mean(axis=0).shape[0]/sr_h
 
         except Exception as e:
@@ -80,7 +80,7 @@ def main():
             continue
 
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
-        crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
+        crema_path = os.path.join(cfg['crema_dir'], fname.split('.')[0] + '.npy')
         np.save(crema_pcp, crema_path)
 
         cqt_path = ''
