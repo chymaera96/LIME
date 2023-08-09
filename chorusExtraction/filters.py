@@ -11,6 +11,16 @@ def generate_filter(N, c=1):
   
   return filt
 
+def generate_filterv2(N, c=5):
+
+    filt = np.zeros((N,N))
+    for x in range(N):
+        for y in range(N):
+            if abs(x - y) <= c:
+                filt[x,y] = 1.0
+  
+    return filt
+
 def preprocess_v1(S, filter_sd=0.1, pad_param=0.1, n_channels=10):
 
     # Mask leading diagonal

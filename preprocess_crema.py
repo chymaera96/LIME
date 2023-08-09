@@ -44,7 +44,7 @@ def main():
     print(f'{len(fpaths)} paths loaded!')
 
     # Preprocessing code
-    columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
+    columns = ['audio_path', 'audio_length', 'cqt_path', 'crema_path', 'lvec_path', 'lyrics_path', 'pgram_path']
     if not os.path.exists(cfg['metadata_path']):
         metadata = []
     else:
@@ -78,13 +78,22 @@ def main():
             continue
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
         crema_path = os.path.join(cfg['crema_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
-        torch.save(crema_pcp, crema_path)
+        np.save(crema_pcp, crema_path)
 
         pgram_path = ''
         cqt_path = ''
         lyrics_path = ''
+        lvec_path = ''
 
-        metadata.append(dict(zip(columns, [fpath, audio_length, lyrics_path, cqt_path, crema_path, pgram_path])))
+        metadata.append({
+            'fpath': fpath,
+            'audio_length': audio_length,
+            'cqt_path': cqt_path,
+            'crema_path': crema_path,
+            'lvec_path': lvec_path,
+            'lyrics_path': lyrics_path,
+            'pgram_path': pgram_path
+        })
 
 
 if __name__ == '__main__':

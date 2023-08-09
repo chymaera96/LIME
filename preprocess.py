@@ -7,7 +7,6 @@ import pandas as pd
 import librosa
 from spleeter.separator import Separator
 from spleeter.audio.adapter import AudioAdapter
-import tensorflow as tf
 import warnings
 
 from util import load_audio, load_config
@@ -15,6 +14,7 @@ from LyricsAlignment.wrapper import extract_phonemegram, align
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='config/config0.yaml', help='configuration file')
+parser.add_argument('--dali', type=bool, default='False', help='whether to use DALI dataset')
 
 def extract_stems(audio, separator=None):  
     # separator = Separator('spleeter:4stems')
@@ -58,7 +58,6 @@ def main():
 
 
     # Preprocessing code
-    columns = ['audio_path', 'audio_length', 'lyrics_path', 'cqt_path', 'crema_path', 'pgram_path']
     df = pd.read_csv(cfg['metadata_path'])
     fpaths = list(df['audio_path'])
     metadata = df.to_dict('records')
@@ -79,9 +78,6 @@ def main():
 
         try:
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
-            audio_length = audio.mean(axis=0).shape[0]/sr_h
-            if audio_length > 360:
-                continue
         except Exception as e:
             print(e)
             continue
@@ -94,19 +90,22 @@ def main():
             print(e)
             continue
         
-        pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
-        if os.path.exists(pgram_path):
-            continue
-        
-        pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=False)
-        torch.save(pgram, pgram_path)
+        if not args.dali:
+            pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
+            if os.path.exists(pgram_path):
+                continue
+            
+            pgram = extract_phonemegram(stems['vocals'], method='MTL', cuda=False)
+            torch.save(pgram, pgram_path)
+        else:
+            pgram_path = ''
 
         # Downsample stems to 16 kHz
         for k, v in stems.items():
             stems[k] = librosa.resample(v, orig_sr=sr_h, target_sr=cfg['sr_l'])
         cqt = compute_cqt_spectrogram(stems, cfg)
         cqt_path = os.path.join(cfg['cqt_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
-        torch.save(cqt, cqt_path)
+        np.save(cqt, cqt_path)
 
         # Add pgram and cqt paths to metadata based on audio path
         for m in metadata:
