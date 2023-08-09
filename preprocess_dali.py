@@ -50,7 +50,7 @@ def main():
     print('Creating CREMA model...')
     model = crema.models.chord.ChordModel()
 
-    for ix, fpath in enumerate(os.listdir(fpaths)):
+    for ix, fpath in enumerate(fpaths):
 
         if ix % 10 == 0:
             print(f'Processing {ix} of {len(fpaths)}...')
