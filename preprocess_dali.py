@@ -15,7 +15,7 @@ parser.add_argument('--config', type=str, default='config/dali.yaml', help='conf
 from preprocess import extract_lyrics_vectors, compute_crema_pcp
 from util import load_audio, load_config
 
-def ala_extractor(cfg, dali_data, annot_path, audio_path):
+def ala_extractor(dali_data, annot_path, audio_path):
     entry = dali_data[annot_path.split('.gz')[0]]
     df = pd.DataFrame.from_dict(entry.annotations['annot']['words'])
     df = df[['text','time']]
@@ -63,7 +63,7 @@ def main():
         audio_path = os.path.join(cfg['dali_audio_dir'], fpath.split('.gz')[0] + '.mp3')
         annot_path = os.path.join(cfg['dali_subset_flist'], fpath)
 
-        lvecs = ala_extractor(cfg, dali_data, annot_path, audio_path)
+        lvecs = ala_extractor(dali_data, annot_path, audio_path)
         if lvecs is None:
             continue
         lvec_path = os.path.join(cfg['lvec_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
