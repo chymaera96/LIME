@@ -75,7 +75,6 @@ def main():
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
         cqt_path = os.path.join(cfg['cqt_dir'], fpath.split('/')[-1].split('.')[0] + '.npy')
-        pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
 
         if any([cqt_path == m['cqt_path'] for m in metadata]):
             continue
