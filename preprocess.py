@@ -71,10 +71,14 @@ def main():
                 df = pd.DataFrame(metadata)
                 df.to_csv(cfg['metadata_path'], index=False)
 
+
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
-        # if any([fpath == m['audio_path'] for m in metadata]):
-        #     continue
+        cqt_path = os.path.join(cfg['cqt_dir'], fpath.split('/')[-1].split('.')[0] + '.npy')
+        pgram_path = os.path.join(cfg['pgram_dir'], fpath.split('/')[-1].split('.')[0] + '.pt')
+
+        if any([cqt_path == m['cqt_path'] for m in metadata]):
+            continue
 
         try:
             audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
