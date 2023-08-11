@@ -80,7 +80,9 @@ def main():
             continue
 
         try:
-            audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                audio, sr_h = load_audio(fpath, sr=cfg['sr_h'])
         except Exception as e:
             print(e)
             continue
