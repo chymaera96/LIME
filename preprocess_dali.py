@@ -62,7 +62,6 @@ def main():
                 df.to_csv(cfg['metadata_path'], index=False)
 
         audio_path = os.path.join(cfg['dali_audio_dir'], fname.split('.gz')[0] + '.mp3')
-        print(audio_path)
         annot_path = os.path.join(cfg['dali_annot_dir'], fname)
 
         if any([audio_path == m['audio_path'] for m in metadata]):
@@ -80,6 +79,7 @@ def main():
 
         except Exception as e:
             print(e)
+            print('Failed to load audio at', audio_path)
             continue
 
         lvecs = ala_extractor(dali_data, annot_path, audio_length)
