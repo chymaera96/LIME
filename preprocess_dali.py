@@ -49,14 +49,14 @@ def main():
 
     print('Loading DALI annotations...')
     dali_data = dali_code.get_the_DALI_dataset(cfg['dali_annot_dir'], skip=[], keep=[])
-    # print('Creating CREMA model...')
-    # model = crema.models.chord.ChordModel()
+    print('Creating CREMA model...')
+    model = crema.models.chord.ChordModel()
 
     for ix, fname in enumerate(fnames):
 
         if ix % 10 == 0:
             print(f'Processing {ix} of {len(fnames)}...')
-            model = crema.models.chord.ChordModel()
+            # model = crema.models.chord.ChordModel()
             if ix != 0:
                 df = pd.DataFrame(metadata)
                 df.to_csv(cfg['metadata_path'], index=False)
