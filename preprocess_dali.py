@@ -82,13 +82,15 @@ def main():
             print('Failed to load audio at', audio_path)
             continue
 
-        lvecs = ala_extractor(dali_data, annot_path, audio_length)
+        lvecs = ala_extractor(dali_data, annot_path, audio_length) 
         if lvecs is None:
             continue
         lvec_path = os.path.join(cfg['lvec_dir'], fname.split('.')[0] + '.npy')
         np.save(lvec_path, lvecs)
 
         crema_pcp = compute_crema_pcp(audio, sr_h, model=model)
+        if not (crema_pcp > 0).any():
+            print("CREMA_pcp empty") 
         crema_path = os.path.join(cfg['crema_dir'], fname.split('.')[0] + '.npy')
         np.save(crema_path, crema_pcp)
 
