@@ -10,9 +10,11 @@ def load_audio(path, sr=16000):
     try:
         audio, sr = librosa.load(path, sr=sr, mono=False)
     except Exception as e:
-        print(e)
-        audio, sr = sf.read(path)  
-        print(audio.shape)
+        print('Librosa error')
+        audio, sr = sf.read(path)
+        if len(audio.shape) == 1:
+            audio = np.expand_dims(audio, axis=0)
+        
     return audio, sr
 
 def load_config(config_path):
