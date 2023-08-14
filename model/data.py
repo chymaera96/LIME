@@ -8,7 +8,6 @@ import os
 import pandas as pd
 
 from util import *
-from preprocess import extract_stems, compute_cqt_spectrogram
 from chorusExtraction.utils import compute_sm_ti
 
 def pad_ssm(tensor_list):
@@ -34,7 +33,7 @@ def collate_fn(batch):
   
     S = pad_sequence(S, batch_first=True).permute(0,2,3,1)
 
-    if size == 3:
+    if size == 4:
         return S, I1, I2, L
     else:
         return S

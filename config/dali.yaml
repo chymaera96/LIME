@@ -24,3 +24,12 @@ batch_size : 16
 num_workers : 4
 lr : 0.001
 n_epochs : 100
+T_max : 80
+gamma : 0.75
+num_workers : 4
+
+# Model parameters
+SE_blocks: [1, 2, 1, 2]
+freq_mask: 28
+time_mask: 100
+noise_std: False

@@ -47,7 +47,7 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         assert emb_ssm.shape == I1.shape == I2.shape
         loss1 = weighted_mse_loss(emb_ssm, I1, L)
         loss2 = weighted_mse_loss(emb_ssm, I2, L)
-        loss = loss1 + cfg['gamma'] * loss2
+        loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2
 
         loss.backward()
         optimizer.step()
@@ -86,9 +86,9 @@ def main():
                               shuffle=False, collate_fn=collate_fn)
     
     print("Loading model...")
-    model = EmbeddingNetwork(SEBasicBlock, [1,2,1,2]).to(device)
+    model = EmbeddingNetwork(SEBasicBlock, cfg['SE_blocks']).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = cfg['T_max'], eta_min = 1e-7)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = cfg['T_max'], eta_min = 1e-5)
 
     if args.resume:
         if os.path.isfile(args.resume):
