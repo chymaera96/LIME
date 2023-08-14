@@ -25,8 +25,8 @@ def collate_fn(batch):
     batch = [dataset[i] for i in N]
     """
     size = len(batch[0])
-    if size == 3:
-        S, I1, I2 = zip(*batch)
+    if size == 4:
+        S, I1, I2, L = zip(*batch)
         I1 = pad_ssm(I2)
         I2 = pad_ssm(I2)
     else:
@@ -35,7 +35,7 @@ def collate_fn(batch):
     S = pad_sequence(S, batch_first=True).permute(0,2,3,1)
 
     if size == 3:
-        return S, I1, I2
+        return S, I1, I2, L
     else:
         return S
 
@@ -60,6 +60,7 @@ class LIMEDataset(Dataset):
                 cqt = qtile_normalize(cqt, self.norm)
                 lyr_enc = np.load(row['lyr_enc_path'])
                 crema_pcp = np.load(row['crema_path'])
+                audio_len = row['audio_length']
             else:
                 raise NotImplementedError
             
@@ -96,7 +97,7 @@ class LIMEDataset(Dataset):
         crema_SSM = torch.from_numpy(crema_SSM).to(torch.float32)
         lyr_SSM = torch.from_numpy(lyr_SSM).to(torch.float32)
 
-        return cqt, lyr_SSM, crema_SSM
+        return cqt, lyr_SSM, crema_SSM, audio_len
 
 
         

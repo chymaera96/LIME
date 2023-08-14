@@ -14,6 +14,7 @@ from util import *
 from model.augment import Augment
 from model.data import LIMEDataset, collate_fn
 from model.embedding import EmbeddingNetwork, SEBasicBlock
+from model.loss import weighted_mse_loss
 
 root = os.path.dirname(__file__)
 model_folder = os.path.join(root,"checkpoint")
@@ -35,16 +36,17 @@ parser.add_argument('--ckp', default='lime_config0_0', type=str,
 def train(cfg, train_loader, model, optimizer, augment=None):
     model.train()
     loss_epoch = 0
-    for idx, (S, I1, I2) in enumerate(train_loader):
+    for idx, (S, I1, I2, L) in enumerate(train_loader):
         S, I1, I2 = S.to(device), I1.to(device), I2.to(device)
+        L = torch.Tensor(L).to(device)
         optimizer.zero_grad()
         with torch.no_grad():
             S = augment(S) if augment is not None else S
         output = model(S)
         emb_ssm = compute_smooth_ssm(output)
         assert emb_ssm.shape == I1.shape == I2.shape
-        loss1 = F.mse_loss(emb_ssm, I1)
-        loss2 = F.mse_loss(emb_ssm, I2)
+        loss1 = weighted_mse_loss(emb_ssm, I1, L)
+        loss2 = weighted_mse_loss(emb_ssm, I2, L)
         loss = loss1 + cfg['gamma'] * loss2
 
         loss.backward()

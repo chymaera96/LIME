@@ -17,3 +17,10 @@ lvec_dir : 'data/lvec'
 sr_h : 22050
 sr_l : 16000
 hop_length : 500
+
+# Hyperparameters
+seed : 42
+batch_size : 16
+num_workers : 4
+lr : 0.001
+n_epochs : 100
