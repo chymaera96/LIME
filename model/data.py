@@ -55,7 +55,7 @@ class LIMEDataset(Dataset):
         row = self.metadata.iloc[idx] 
         try:
             if self.train:
-                cqt = np.abs(np.load(row['cqt_path']))
+                cqt = np.load(row['cqt_path'])
                 cqt = qtile_normalize(cqt, self.norm)
                 lyr_enc = np.load(row['lvec_path'])
                 crema_pcp = np.load(row['crema_path'])
