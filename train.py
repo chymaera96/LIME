@@ -89,7 +89,7 @@ def main():
                               shuffle=False, collate_fn=collate_fn)
     
     print("Loading model...")
-    model = EmbeddingNetwork(SEBasicBlock, cfg['SE_blocks']).to(device)
+    model = EmbeddingNetwork(cfg, SEBasicBlock).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = cfg['T_max'], eta_min = 1e-5)
 

@@ -30,6 +30,7 @@ num_workers : 4
 crema_threshold : null
 lyr_enc_threshold : 1
 norm : 0.95
+embed_dim : 12
 
 # Model parameters
 SE_blocks: [1, 2, 1, 2]
