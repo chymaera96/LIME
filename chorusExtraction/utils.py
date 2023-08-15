@@ -107,7 +107,7 @@ def normalize_feature_sequence(X, norm='2', threshold=0.0001, v=None):
 
     return X_norm
 
-def compute_sm_ti(X, L=1, tempo_rel_set=np.asarray([1]), shift_set=np.asarray([0]), direction=2, thresh=None):
+def compute_sm_ti(X, L=5, tempo_rel_set=np.asarray([1]), shift_set=np.asarray([0]), direction=2, thresh=None):
 
     for shift in shift_set:
         Y_cyc = shift_cyc_matrix(X, shift)
@@ -129,7 +129,7 @@ def compute_sm_ti(X, L=1, tempo_rel_set=np.asarray([1]), shift_set=np.asarray([0
             S_TI = np.maximum(S_cyc, S_TI)
 
 
-    return S_TI, I_TI
+    return S_TI
 
 
 def shift_cyc_matrix(X, shift=0):
