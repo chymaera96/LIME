@@ -38,12 +38,13 @@ def train(cfg, train_loader, model, optimizer, augment=None):
     loss_epoch = 0
     for idx, (S, I1, I2, L) in enumerate(train_loader):
         S, I1, I2 = S.to(device), I1.to(device), I2.to(device)
-        print(f"CQT shape in train: {S.shape}")
+        # print(f"CQT shape in train: {S.shape}")
         L = torch.Tensor(L).to(device)
         optimizer.zero_grad()
         with torch.no_grad():
             S = augment(S) if augment is not None else S
         output = model(S)
+        print(f"Output shape: {output.shape}")
         emb_ssm = compute_smooth_ssm(output)
         assert emb_ssm.shape == I1.shape == I2.shape
         loss1 = weighted_mse_loss(emb_ssm, I1, L)
