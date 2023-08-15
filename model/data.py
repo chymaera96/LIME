@@ -93,6 +93,7 @@ class LIMEDataset(Dataset):
         
         
         cqt = torch.from_numpy(cqt).permute(2,1,0).to(torch.float32) # Shape compatible with the collate_fn
+        print(f"CQT shape in __getitem__: {cqt.shape}")
         crema_SSM = torch.from_numpy(crema_SSM).to(torch.float32)
         lyr_SSM = torch.from_numpy(lyr_SSM).to(torch.float32)
 
