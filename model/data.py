@@ -57,7 +57,7 @@ class LIMEDataset(Dataset):
             if self.train:
                 cqt = np.abs(np.load(row['cqt_path']))
                 cqt = qtile_normalize(cqt, self.norm)
-                lyr_enc = np.load(row['lyr_enc_path'])
+                lyr_enc = np.load(row['lvec_path'])
                 crema_pcp = np.load(row['crema_path'])
                 audio_len = row['audio_length']
             else:
