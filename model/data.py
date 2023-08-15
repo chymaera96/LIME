@@ -31,7 +31,7 @@ def collate_fn(batch):
     else:
         S = zip(*batch)
   
-    S = pad_sequence(S, batch_first=True).permute(0,2,3,1)
+    S = pad_sequence(S, batch_first=True).permute(0,3,2,1)
 
     if size == 4:
         return S, I1, I2, L
