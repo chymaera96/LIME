@@ -95,8 +95,10 @@ def main():
             print("=> loading checkpoint '{}'".format(args.resume))
             model, optimizer, scheduler, start_epoch, loss_log = load_ckp(args.resume, model, optimizer, scheduler)
         else:
-            start_epoch = 0
-            loss_log = []
+            print("=> no checkpoint found at '{}'".format(args.resume))
+    else:
+        start_epoch = 0
+        loss_log = []
     
     print("Training...")
     best_loss = float('inf')
