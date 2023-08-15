@@ -20,7 +20,7 @@ def extract_stems(audio, separator=None):
     # separator = Separator('spleeter:4stems')
     stems = separator.separate(audio.T)
     # print(stems['vocals'].shape)
-    stems = {k: v.T.mean(axis=0) for k, v in stems.items()}
+    stems = {k: v.T.mean(axis=0).reshape(1,-1) for k, v in stems.items()}
     return stems
 
 
@@ -49,7 +49,7 @@ def extract_lyrics_vectors(ala_file=None, ala=None, size=None, max_dur=5.0):
 
 def compute_cqt_spectrogram(stems, cfg):
     audio = np.concatenate([stems['vocals'], stems['drums'], stems['bass'], stems['other']])
-    cqt = librosa.cqt(audio, sr=cfg['sr_h'], hop_length=cfg['hop_length'])
+    cqt = np.abs(librosa.cqt(audio, sr=cfg['sr_h'], hop_length=cfg['hop_length']))
     return cqt
 
 def main():
@@ -76,8 +76,8 @@ def main():
             continue
         cqt_path = os.path.join(cfg['cqt_dir'], fpath.split('/')[-1].split('.')[0] + '.npy')
 
-        if any([cqt_path == m['cqt_path'] for m in metadata]):
-            continue
+        # if any([cqt_path == m['cqt_path'] for m in metadata]):
+        #     continue
 
         try:
             with warnings.catch_warnings():
