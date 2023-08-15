@@ -64,21 +64,26 @@ class SEBasicBlock(nn.Module):
         return out
     
 class EmbeddingNetwork(nn.Module):
-    def __init__(self, block, layers, n_emb=12):
+    def __init__(self, cfg, block):
         super(EmbeddingNetwork, self).__init__()
         self.inplanes = 16
-        self.out_shape = n_emb
+        self.out_shape = cfg['embed_dim']
+        self.layers = cfg['SE_blocks']
         self.conv = nn.Sequential(
                         nn.Conv2d(4, 16, kernel_size = [12,2], stride = [3,1], padding = [11,0]),
                         nn.BatchNorm2d(16),
                         nn.ReLU())
-        self.senet1 = self._make_layer(block, 16, layers[0], 'se_net', 2)
-        self.resnet1 = self._make_layer(block, 64, layers[1], 'resnet', 2)
-        self.senet2 = self._make_layer(block, 64, layers[2], 'se_net', 2)
-        self.resnet2 = self._make_layer(block, 128, layers[3], 'resnet', 2)
+        self.senet1 = self._make_layer(block, 16, self.layers[0], 'se_net', 2)
+        self.resnet1 = self._make_layer(block, 64, self.layers[1], 'resnet', 2)
+        self.senet2 = self._make_layer(block, 64, self.layers[2], 'se_net', 2)
+        self.resnet2 = self._make_layer(block, 128, self.layers[3], 'resnet', 2)
 
-        self.tdd = nn.Sequential(
-                        nn.Conv2d(1, self.out_shape, (256, 1)),
+        self.tdd1 = nn.Sequential(
+                        nn.Conv2d(1, 64, (256, 1)),
+                        nn.ReLU(),
+        )
+        self.tdd2 = nn.Sequential(
+                        nn.Conv2d(1, self.out_shape, (64, 1)),
                         nn.ReLU(),
         )
 
@@ -105,6 +110,9 @@ class EmbeddingNetwork(nn.Module):
         x = self.resnet2(x)
         
         x = x.reshape(x.shape[0],1,-1,x.shape[-1])
-        x = self.tdd(x).reshape(self.out_shape,-1)
+        x = self.tdd1(x)
+        x = x.reshape(x.shape[0],1,-1,x.shape[-1])
+        x = self.tdd2(x)
+        x = x.reshape(x.shape[0],self.out_shape,-1)
 
         return x
