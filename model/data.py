@@ -97,6 +97,9 @@ class LIMEDataset(Dataset):
         lyr_SSM = torch.from_numpy(lyr_SSM).to(torch.float32)
 
         return cqt, lyr_SSM, crema_SSM, audio_len
+    
+    def __len__(self):
+        return len(self.metadata)
 
 
         
