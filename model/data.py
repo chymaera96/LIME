@@ -26,7 +26,7 @@ def collate_fn(batch):
     size = len(batch[0])
     if size == 4:
         S, I1, I2, L = zip(*batch)
-        I1 = pad_ssm(I2)
+        I1 = pad_ssm(I1)
         I2 = pad_ssm(I2)
     else:
         S = zip(*batch)
