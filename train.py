@@ -113,7 +113,7 @@ def main():
         writer.add_scalar("Loss/train", loss_epoch, epoch)
         loss_log.append(loss_epoch)
 
-        if loss_epoch < best_loss:
+        if loss_epoch < best_loss or epoch % 20 == 0:
             best_loss = loss_epoch
             checkpoint = {
                 'epoch': epoch,
@@ -122,7 +122,7 @@ def main():
                 'optimizer': optimizer.state_dict(),
                 'scheduler': scheduler.state_dict()
             }
-            save_ckp(checkpoint,epoch, model_name, model_folder)
+            save_ckp(checkpoint, model_name, model_folder, epoch)
             scheduler.step()
     
 
