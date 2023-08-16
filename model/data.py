@@ -72,8 +72,8 @@ class LIMEDataset(Dataset):
             cqt = self.transform(cqt)
 
         # Pad CQT for edge cases
-        if cqt.shape[-1] / 16 % 1 <= 0.0625:
-            print(f'CQT shape edge case! {cqt.shape}')
+        if cqt.shape[-1] / 16 % 1 <= 0.0625 and cqt.shape[-1] / 16 % 1 > 0:
+            # print(f'CQT shape edge case! {cqt.shape}')
             cqt = np.pad(cqt, ((0,0), (0,0), (0,1)), mode='constant', constant_values=0)
 
         # Checking number of frames in crema_pcp and lyr_enc
