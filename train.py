@@ -14,7 +14,7 @@ from util import *
 from model.augment import Augment
 from model.data import LIMEDataset, collate_fn
 from model.embedding import EmbeddingNetwork, SEBasicBlock
-from model.loss import weighted_mse_loss
+from model.loss import weighted_mse_loss, assymetric_loss
 
 root = os.path.dirname(__file__)
 model_folder = os.path.join(root,"checkpoint")
@@ -50,7 +50,7 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         if not emb_ssm.shape == I1.shape == I2.shape:
             print(f"Shapes of emb_ssm, I1, I2: {emb_ssm.shape}, {I1.shape}, {I2.shape}")
             print(f" input shape: {S.shape}")
-        loss1 = weighted_mse_loss(emb_ssm, I1, L)
+        loss1 = assymetric_loss(emb_ssm, I1, L)
         loss2 = weighted_mse_loss(emb_ssm, I2, L)
         loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2
 
