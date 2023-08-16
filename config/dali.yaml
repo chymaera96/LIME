@@ -25,7 +25,7 @@ num_workers : 4
 lr : 0.0001
 n_epochs : 100
 T_max : 80
-gamma : 0.9
+gamma : 0.75
 num_workers : 4
 crema_threshold : null
 lyr_enc_threshold : 1
@@ -36,4 +36,4 @@ embed_dim : 12
 SE_blocks: [1, 2, 1, 2]
 freq_mask: 28
 time_mask: 100
-noise_std: False
+noise_std: 0.05
