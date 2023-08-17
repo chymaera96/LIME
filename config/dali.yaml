@@ -22,7 +22,7 @@ hop_length : 500
 seed : 42
 batch_size : 16
 num_workers : 4
-lr : 0.001
+lr : 0.0005
 n_epochs : 100
 T_max : 80
 gamma : 0.8
