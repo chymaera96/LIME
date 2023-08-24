@@ -5,30 +5,6 @@ import scipy.signal as signal
 def compute_sm_from_audio(x, L=21, H=5, L_smooth=16, tempo_rel_set=np.array([1]),
 							 shift_set=np.array([0]), strategy='relative', scale=True, thresh=0.15,
 							 penalty=0.0, binarize=False):
-	"""Compute an SSM
-	
-	Args:
-		x (np.array): Audio array (sampled at Fs = 22050)
-		L (int): Length of smoothing filter (Default value = 21)
-		H (int): Downsampling factor (Default value = 5)
-		L_smooth (int): Length of filter (Default value = 16)
-		tempo_rel_set (np.ndarray):  Set of relative tempo values (Default value = np.array([1]))
-		shift_set (np.ndarray): Set of shift indices (Default value = np.array([0]))
-		strategy (str): Thresholding strategy (see :func:`libfmp.c4.c4s2_ssm.compute_sm_ti`)
-			(Default value = 'relative')
-		scale (bool): If scale=True, then scaling of positive values to range [0,1] (Default value = True)
-		thresh (float): Treshold (meaning depends on strategy) (Default value = 0.15)
-		penalty (float): Set values below treshold to value specified (Default value = 0.0)
-		binarize (bool): Binarizes final matrix (positive: 1; otherwise: 0) (Default value = False)
-		
-	Returns:
-		x (np.ndarray): Audio signal
-		x_duration (float): Duration of audio signal (seconds)
-		X (np.ndarray): Feature sequence
-		Fs_feature (scalar): Feature rate
-		S_thresh (np.ndarray): SSM
-		I (np.ndarray): Index matrix
-	"""
 	# Waveform
 	Fs = 22050
 	x_duration = x.shape[0] / Fs
@@ -133,19 +109,7 @@ def compute_sm_ti(X, L=5, tempo_rel_set=np.asarray([1]), shift_set=np.asarray([0
 
 
 def shift_cyc_matrix(X, shift=0):
-    """Cyclic shift of features matrix along first dimension
-
-    Notebook: C4/C4S2_SSM-TranspositionInvariance.ipynb
-
-    Args:
-        X (np.ndarray): Feature respresentation
-        shift (int): Number of bins to be shifted (Default value = 0)
-
-    Returns:
-        X_cyc (np.ndarray): Cyclically shifted feature matrix
-    """
     X_cyc = np.roll(X, shift=shift, axis=0) 
-
     return X_cyc
 
 def filter_diag_mult_sm(S, L=1, tempo_rel_set=np.asarray([1]), direction=0):
@@ -281,3 +245,15 @@ def threshold_matrix(S, thresh, strategy='absolute', scale=False, penalty=0.0, b
         S_thresh[S_thresh > 0] = 1
         S_thresh[S_thresh < 0] = 0
     return S_thresh
+
+def compute_scape_plot(S, fitness):
+    low = S.shape[0] - len(fitness[0]) + 1
+
+    scape = np.zeros((S.shape[0],S.shape[1]))
+    for iy in range(len(fitness)):
+        if iy < low:
+            continue
+        pad = S.shape[0] - len(fitness[iy])
+        scape[iy,: -int(np.ceil(pad))] = fitness[iy].detach().cpu().numpy()
+
+    return scape
