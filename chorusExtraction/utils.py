@@ -257,3 +257,9 @@ def compute_scape_plot(S, fitness):
         scape[iy,: -int(np.ceil(pad))] = fitness[iy].detach().cpu().numpy()
 
     return scape
+
+def extract_chorus(scape, n_points=5):
+    sorted_rev_idx = np.argsort(scape.ravel())
+    row, col = np.unravel_index(sorted_rev_idx[-n_points:], scape.shape)
+    top_n_idxs = list(zip(row, col))
+    return top_n_idxs
