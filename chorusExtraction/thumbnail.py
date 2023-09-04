@@ -8,7 +8,7 @@ import random
 from tqdm import tqdm
 import time
 
-from filters import generate_filter, preprocess
+from .filters import generate_filter, preprocess
 
 class FastThumbnail(nn.Module):
     def __init__(self, cfg, dims=None, device='cuda'):
