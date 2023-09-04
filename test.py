@@ -19,7 +19,7 @@ from chorusExtraction.utils import compute_scape_plot, extract_chorus_segments
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 parser = argparse.ArgumentParser(description='LIME embedding extractor')
-parser.add_argument('--config', type=str, default='dali.yaml', 
+parser.add_argument('--config', type=str, default='config/dali.yaml', 
                     help='path to config file')
 parser.add_argument('--emb_dir', type=str, default='data/embeddings', 
                     help='path to store embeddings')
