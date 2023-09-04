@@ -33,7 +33,7 @@ def create_test_metadata(cfg, test_dir, ground_truth_path):
     with open(ground_truth_path, 'r') as f:
         ground_truth = json.load(f)
     separator = Separator('spleeter:4stems')
-    for fpath in glob.glob(os.path.join(test_dir, '*.*')):
+    for fpath in glob.glob(os.path.join(test_dir, '*/*.*')):
         if fpath.split('.')[-1] not in cfg['audio_exts']:
             continue
         audio_id = fpath.split('/')[-2]
