@@ -39,7 +39,7 @@ def create_test_metadata(cfg, test_dir, ground_truth_path):
         audio_id = fpath.split('/')[-2]
         if audio_id not in ground_truth.keys():
             continue
-        audio = load_audio(fpath, cfg)
+        audio, sr_l = load_audio(fpath, sr=cfg['sr_l'])
         stems = extract_stems(audio, separator=separator)
         cqt = compute_cqt_spectrogram(stems, cfg)
         cqt_fname = f"{audio_id}.npy"
