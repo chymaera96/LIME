@@ -92,7 +92,7 @@ class LIMEDataset(Dataset):
         crema_SSM = compute_sm_ti(crema_pcp)
         # if self.crema_threshold is not None:
         #     crema_SSM[crema_SSM < self.crema_threshold] = 0
-        # else:
+        # else:cfg['thresh']
         #     crema_SSM[crema_SSM < np.median(crema_SSM)] = 0
 
         lyr_SSM = compute_sm_ti(lyr_enc)

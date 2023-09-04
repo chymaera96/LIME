@@ -258,8 +258,58 @@ def compute_scape_plot(S, fitness):
 
     return scape
 
-def extract_chorus(scape, n_points=5):
+def extract_chorus(scape, n_points=1):
     sorted_rev_idx = np.argsort(scape.ravel())
     row, col = np.unravel_index(sorted_rev_idx[-n_points:], scape.shape)
     top_n_idxs = list(zip(row, col))
     return top_n_idxs
+
+def extract_chorus_segments(S, scape, tempo_deviation=0.1, similarity_threshold=0.05):
+    segments = []
+    start = None
+    l, s  = extract_chorus(scape)[-1]
+    sim_plot = np.sum(S[:, s: s+l + 1] + 1, axis=1)
+    sim_plot[sim_plot < similarity_threshold * max(sim_plot)] = 0
+
+    for i, value in enumerate(sim_plot):
+        if value != 0:
+            if start is None:
+                start = i
+        elif start is not None:
+            segments.append((start, i - 1))
+            start = None
+
+    # If the last segment ends at the end of the array, add it
+    if start is not None:
+        segments.append((start, len(sim_plot) - 1))
+
+    # Removing redundant primary chorus segment
+    segments = [segment for segment in segments if np.argmax(sim_plot) in range(segment[0], segment[1] + 1)]
+
+    # Filtering and combining segments
+    filtered_segments = []
+    prev_segment = segments[0]
+    s_lims = [l*(1-tempo_deviation), l*(1+tempo_deviation)]
+
+    for segment in segments[1:]:
+        start_prev, end_prev = prev_segment
+        start_current, end_current = segment
+
+        if start_current - end_prev <= s_lims[0] and (end_current - start_prev <= s_lims[1]):
+            # Combine the segments
+            prev_segment = (start_prev, max(end_prev, end_current))
+        else:
+            # Add the previous segment to the result and update prev_segment
+            filtered_segments.append(prev_segment)
+            prev_segment = segment
+
+    # Add the last segment to the result
+    filtered_segments.append(prev_segment)
+
+    # Filtering segments which are outside reasonable limits
+    filtered_segments = [segment for segment in filtered_segments if segment[1] - segment[0] >= s_lims[0]]
+    # Appending primary segment
+    filtered_segments.append((s, s + l))
+
+
+    return filtered_segments
