@@ -70,6 +70,8 @@ def main():
         df = pd.read_csv('data/test/salami_test.csv')
     score_ckp = {}
     for fpath in glob.glob('checkpoint/*.pth'):
+        if not fpath.endswith('0.pth'):
+            continue
         print(f"Loading checkpoint {fpath} ...")
         ckp_name = fpath.split('/')[-1].split('.')[0]
         model = EmbeddingNetwork(cfg, SEBasicBlock).to(device) 
@@ -120,8 +122,9 @@ def main():
         print(f"Average F-measure for annot1: {np.mean(scores_annot1[:,0])}")
         print(f"Average Precision for annot1: {np.mean(scores_annot1[:,1])}")
         print(f"Average Recall for annot1: {np.mean(scores_annot1[:,2])}")
-        score_ckp[ckp_name] = [np.mean(scores_annot1[:,1])]
-
+        score_ckp[ckp_name] = np.mean(scores_annot1[:,1])
+        with open('data/scores.json', 'w') as f:
+            json.dump(score_ckp, f)
 
 if __name__ == '__main__':
     main()
