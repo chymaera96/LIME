@@ -39,7 +39,7 @@ time_mask: 100
 noise_std: 0.1
 
 # Thumbnaiing parameters
-max_dim : 600
+max_dim : 800
 pad_param : 0.2
 n_channels : 20
 filter_width : 5
