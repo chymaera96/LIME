@@ -27,6 +27,8 @@ parser.add_argument('--test_dir', type=str, default=None,
                     help='test audio directory')
 parser.add_argument('--scape_plot', type=bool, default=False, 
                     help='save example scape plot')
+parser.add_argument('--preprocess', type=bool, default=True, 
+                    help='preprocess test audio to cqt')
 
 def create_test_metadata(cfg, test_dir, ground_truth_path):
     metadata = []
@@ -60,9 +62,12 @@ def main():
     with open(ground_truth_path, 'r') as f:
         ground_truth = json.load(f)
     print("Creating test metadata ...")
-    df = create_test_metadata(cfg, args.test_dir, ground_truth_path)
+    if args.preprocess or len(os.listdir('data/test')) == 0:
+        df = create_test_metadata(cfg, args.test_dir, ground_truth_path)
+    else:
+        df = pd.read_csv('data/test/salami_test.csv')
     score_ckp = {}
-    for fpath in glob.glob('checkpoints/ *.pt'):
+    for fpath in glob.glob('checkpoint/ *.pt'):
         print(f"Loading checkpoint {fpath} ...")
         ckp_name = fpath.split('/')[-1].split('.')[0]
         model = EmbeddingNetwork(cfg, SEBasicBlock).to(device) 
