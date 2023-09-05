@@ -119,6 +119,7 @@ def main():
 
             # Computing F-measure for annot2
             ref2 = np.array(ref2)
+            print(ref2)
             if not len(ref2) == 0:
                 f2, p2, r2 = detection(ref2, est, window=3.0)
                 scores_annot2.append([f2, p2, r2])
