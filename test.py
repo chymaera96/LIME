@@ -93,13 +93,13 @@ def main():
                 plt.close()
             audThumb = FastThumbnail(cfg=cfg)
             cov, rep = audThumb(S)
-            scape = compute_scape_plot(S, fitness=rep)
+            scape = compute_scape_plot(ssm, fitness=rep)
             if ix == 0 and args.scape_plot:
                 plt.imshow(scape, cmap='hot', origin='lower')
                 plt.savefig(f"plots/{audio_id}_{ckp_name}_scape.png")
                 plt.close()
 
-            est = extract_chorus_segments(S, scape)
+            est = extract_chorus_segments(ssm, scape)
             # Sorting estimates according to start time
             est = sorted(est, key=lambda x: x[0])
             ref1 = ground_truth[audio_id]["annot1"]
