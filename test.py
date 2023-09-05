@@ -125,6 +125,8 @@ def main():
 
         scores_annot1 = np.array(scores_annot1)
         scores_annot2 = np.array(scores_annot2)
+        print(scores_annot1.shape)
+        print(scores_annot1)
         print(f"Average F-measure for annot1: {np.mean(scores_annot1[:,0])}")
         print(f"Average F-measure for annot2: {np.mean(scores_annot2[:,0])}")
         print(f"Average Precision for annot1: {np.mean(scores_annot1[:,1])}")
