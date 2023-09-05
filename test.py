@@ -67,7 +67,7 @@ def main():
     else:
         df = pd.read_csv('data/test/salami_test.csv')
     score_ckp = {}
-    for fpath in glob.glob('checkpoint/ *.pth'):
+    for fpath in glob.glob('checkpoint/*.pth'):
         print(f"Loading checkpoint {fpath} ...")
         ckp_name = fpath.split('/')[-1].split('.')[0]
         model = EmbeddingNetwork(cfg, SEBasicBlock).to(device) 
