@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import math
 
-def generate_filter(N, c=5):
+def generate_filter(N, c=5, device='cuda'):
 
     filt = torch.zeros((N,N))
     for x in range(N):
@@ -15,8 +15,8 @@ def generate_filter(N, c=5):
 def preprocess(S, pad_param=0.1, n_channels=10):
 
     # Mask leading diagonal
-    mask = np.round(1 - generate_filter(S.shape[0]).to('cpu'))
-    S_clean = np.multiply(S,mask)
+    mask = np.round(1 - generate_filter(S.shape[0], device='cpu'))
+    S_clean = np.multiply(S.detach().cpu(), mask)
     
     # Insert random empty rows and stack resultant SSM into channels
     pad = np.zeros(S_clean.shape[0])
