@@ -62,9 +62,8 @@ def main():
     print("Loading ground truth ...")
     with open(ground_truth_path, 'r') as f:
         ground_truth = json.load(f)
-    if args.preprocess or len(os.listdir('data/test')) == 0:
+    if args.preprocess and len(os.listdir('data/test')) == 0:
         print("Creating test metadata ...")
-
         df = create_test_metadata(cfg, args.test_dir, ground_truth_path)
     else:
         print("Loading test metadata ...")
