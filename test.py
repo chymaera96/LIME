@@ -62,10 +62,12 @@ def main():
     print("Loading ground truth ...")
     with open(ground_truth_path, 'r') as f:
         ground_truth = json.load(f)
-    print("Creating test metadata ...")
     if args.preprocess or len(os.listdir('data/test')) == 0:
+        print("Creating test metadata ...")
+
         df = create_test_metadata(cfg, args.test_dir, ground_truth_path)
     else:
+        print("Loading test metadata ...")
         df = pd.read_csv('data/test/salami_test.csv')
     score_ckp = {}
     for fpath in glob.glob('checkpoint/*.pth'):
