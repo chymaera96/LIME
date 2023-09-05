@@ -80,8 +80,8 @@ def main():
         scores_annot2 = []
         for ix, row in df.iterrows():
             audio_id = str(row['audio_id'])
-            # if audio_id != '1620':
-            #     continue
+            if audio_id != '1620':
+                continue
             cqt = np.load(row['cqt_path'])
             cqt = torch.Tensor(cqt).unsqueeze(0).to(device)
             emb = model(cqt)
@@ -96,8 +96,8 @@ def main():
                 plt.close()
             audThumb = FastThumbnail(cfg=cfg)
             cov, rep = audThumb(S)
-            # print(f"Ssm shape: {S.shape}")
-            # print(rep.shape)
+            print(f"Ssm shape: {S.shape}")
+            print(rep)
             scape = compute_scape_plot(ssm, fitness=rep)
             if ix == 0 and args.scape_plot:
                 plt.imshow(scape, cmap='hot', origin='lower')
