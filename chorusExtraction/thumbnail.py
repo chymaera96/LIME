@@ -52,7 +52,6 @@ class FastThumbnail(nn.Module):
 
         with torch.no_grad():
             for filter in tqdm(self.filterbank):
-                print(f"Filter shape: {filter.shape}")
                 if filter.shape[0] > S.shape[-1]:
                     break
                 kernel = filter.view(1, 1, filter.shape[0], -1).repeat(self.n_channels, 1, 1, 1)
