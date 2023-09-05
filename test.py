@@ -79,7 +79,6 @@ def main():
         scores_annot2 = []
         for ix, row in df.iterrows():
             audio_id = row['audio_id']
-            print(row['cqt_path'])
             cqt = np.load(row['cqt_path'])
             cqt = torch.Tensor(cqt).unsqueeze(0).to(device)
             emb = model(cqt)
@@ -87,7 +86,7 @@ def main():
             S = compute_smooth_ssm(emb)
             S[S < torch.median(S)] = 0
             if ix == 0:
-                plt.imshow(scape, cmap='gray_r', origin='lower')
+                plt.imshow(S, cmap='gray_r', origin='lower')
                 plt.savefig(f"plots/{audio_id}_{ckp_name}_ssm.png")
                 plt.close()
             audThumb = FastThumbnail(cfg=cfg)
