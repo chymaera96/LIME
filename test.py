@@ -79,7 +79,7 @@ def main():
         scores_annot1 = []
         scores_annot2 = []
         for ix, row in df.iterrows():
-            audio_id = row['audio_id']
+            audio_id = str(row['audio_id'])
             cqt = np.load(row['cqt_path'])
             cqt = torch.Tensor(cqt).unsqueeze(0).to(device)
             emb = model(cqt)
