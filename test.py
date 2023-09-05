@@ -71,7 +71,8 @@ def main():
         print(f"Loading checkpoint {fpath} ...")
         ckp_name = fpath.split('/')[-1].split('.')[0]
         model = EmbeddingNetwork(cfg, SEBasicBlock).to(device) 
-        model.load_state_dict(torch.load(fpath, map_location=device))
+        ckp = torch.load(fpath, map_location=device)
+        model.load_state_dict(ckp['state_dict'])
         model.eval()
         scores_annot1 = []
         scores_annot2 = []
