@@ -97,7 +97,7 @@ def main():
             audThumb = FastThumbnail(cfg=cfg)
             cov, rep = audThumb(S)
             print(f"Ssm shape: {S.shape}")
-            print(rep)
+            print([len(r) for r in rep])
             scape = compute_scape_plot(ssm, fitness=rep)
             if ix == 0 and args.scape_plot:
                 plt.imshow(scape, cmap='hot', origin='lower')
