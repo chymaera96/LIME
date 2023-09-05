@@ -79,8 +79,8 @@ def main():
         scores_annot1 = []
         for ix, row in df.iterrows():
             audio_id = str(row['audio_id'])
-            if ix == 7:
-                break
+            # if ix == 7:
+            #     break
             cqt = np.load(row['cqt_path'])
             cqt = torch.Tensor(cqt).unsqueeze(0).to(device)
             emb = model(cqt)
