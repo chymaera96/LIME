@@ -4,7 +4,7 @@ import math
 
 def generate_filter(N, c=5):
 
-    filt = np.zeros((N,N))
+    filt = torch.zeros((N,N))
     for x in range(N):
         for y in range(N):
             if abs(x - y) <= c:
