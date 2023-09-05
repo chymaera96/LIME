@@ -15,7 +15,7 @@ def generate_filter(N, c=5):
 def preprocess(S, pad_param=0.1, n_channels=10):
 
     # Mask leading diagonal
-    mask = np.round(1 - generate_filter(S.shape[0]))
+    mask = np.round(1 - generate_filter(S.shape[0]).to('cpu'))
     S_clean = np.multiply(S,mask)
     
     # Insert random empty rows and stack resultant SSM into channels
