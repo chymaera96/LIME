@@ -87,6 +87,7 @@ def main():
             S = compute_smooth_ssm(emb)
             S[S < torch.median(S)] = 0
             if ix == 0:
+                ssm= S.squeeze(0).detach().cpu().numpy()
                 plt.imshow(S.detach().cpu().numpy(), cmap='gray_r', origin='lower')
                 plt.savefig(f"plots/{audio_id}_{ckp_name}_ssm.png")
                 plt.close()
