@@ -46,8 +46,9 @@ def create_test_metadata(cfg, test_dir, ground_truth_path):
         stems = extract_stems(audio, separator=separator)
         cqt = compute_cqt_spectrogram(stems, cfg)
         cqt_fname = f"{audio_id}.npy"
-        np.save(os.path.join('data/test', cqt_fname), cqt)
-        metadata.append({'audio_id': audio_id, 'cqt_path': fpath, 'cqt_shape': cqt.shape})
+        cqt_fpath = os.path.join('data/test', cqt_fname)
+        np.save(cqt_fpath, cqt)
+        metadata.append({'audio_id': audio_id, 'cqt_path': cqt_fpath, 'cqt_shape': cqt.shape})
 
     df = pd.DataFrame(metadata)
     df.to_csv(os.path.join('data/test/salami_test.csv'), index=False)
