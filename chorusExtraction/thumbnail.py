@@ -14,7 +14,7 @@ class FastThumbnail(nn.Module):
     def __init__(self, cfg, dims=None, device='cuda'):
         super().__init__()
         if dims is None:
-            dims = [0, cfg['max_dim']]
+            dims = [1, cfg['max_dim']]
         self.low = dims[0]
         self.high = dims[1]
         self.pad_param = cfg['pad_param']
