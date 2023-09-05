@@ -77,7 +77,6 @@ def main():
         model.load_state_dict(ckp['state_dict'])
         model.eval()
         scores_annot1 = []
-        scores_annot2 = []
         for ix, row in df.iterrows():
             audio_id = str(row['audio_id'])
             if ix == 7:
@@ -108,7 +107,6 @@ def main():
             # Sorting estimates according to start time
             est = sorted(est, key=lambda x: x[0])
             ref1 = ground_truth[audio_id]["annot1"]
-            ref2 = ground_truth[audio_id]["annot2"]
 
             # Computing F-measure for annot1
             est = np.array(est)
@@ -117,24 +115,12 @@ def main():
                 f1, p1, r1 = detection(ref1, est, window=3.0)
                 scores_annot1.append([f1, p1, r1])
 
-            # Computing F-measure for annot2
-            ref2 = np.array(ref2)
-            print(ref2)
-            if not len(ref2) == 0:
-                f2, p2, r2 = detection(ref2, est, window=3.0)
-                scores_annot2.append([f2, p2, r2])
-
         scores_annot1 = np.array(scores_annot1)
-        scores_annot2 = np.array(scores_annot2)
         print(scores_annot1.shape)
-        print(scores_annot2.shape)
         print(f"Average F-measure for annot1: {np.mean(scores_annot1[:,0])}")
-        print(f"Average F-measure for annot2: {np.mean(scores_annot2[:,0])}")
         print(f"Average Precision for annot1: {np.mean(scores_annot1[:,1])}")
-        print(f"Average Precision for annot2: {np.mean(scores_annot2[:,1])}")
         print(f"Average Recall for annot1: {np.mean(scores_annot1[:,2])}")
-        print(f"Average Recall for annot2: {np.mean(scores_annot2[:,2])}")
-        score_ckp[ckp_name] = [np.mean(scores_annot1[:,1]), np.mean(scores_annot2[:,1])]
+        score_ckp[ckp_name] = [np.mean(scores_annot1[:,1])]
 
 
 if __name__ == '__main__':
