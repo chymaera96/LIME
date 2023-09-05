@@ -83,6 +83,7 @@ def main():
             cqt = np.load(row['cqt_path'])
             cqt = torch.Tensor(cqt).unsqueeze(0).to(device)
             emb = model(cqt)
+            print(f"Processing audio {audio_id} ...")
             # torch.save(os.path.join(args.emb_dir, f"{audio_id}.pt"), emb)
             S = compute_smooth_ssm(emb).squeeze(0)
             S[S < torch.median(S)] = 0
