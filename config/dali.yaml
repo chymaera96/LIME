@@ -31,6 +31,7 @@ crema_threshold : null
 lyr_enc_threshold : 1
 norm : 0.95
 embed_dim : 12
+lambda: 0.05
 
 # Model parameters
 SE_blocks: [1, 2, 1, 2]
@@ -43,3 +44,5 @@ max_dim : 800
 pad_param : 0.2
 n_channels : 20
 filter_width : 5
+
+

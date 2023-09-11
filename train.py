@@ -14,7 +14,7 @@ from util import *
 from model.augment import Augment
 from model.data import LIMEDataset, collate_fn
 from model.embedding import EmbeddingNetwork, SEBasicBlock
-from model.loss import weighted_mse_loss, assymetric_loss
+from model.loss import weighted_mse_loss, asymmetric_loss
 
 root = os.path.dirname(__file__)
 model_folder = os.path.join(root,"checkpoint")
@@ -33,9 +33,11 @@ parser.add_argument('--seed', default=None, type=int,
 parser.add_argument('--ckp', default='lime_config0_0', type=str,
                     help='checkpoint_name')
 
+
 def train(cfg, train_loader, model, optimizer, augment=None):
     model.train()
     loss_epoch = 0
+    l1_reg = 0
     for idx, (S, I1, I2, L) in enumerate(train_loader):
         S, I1, I2 = S.to(device), I1.to(device), I2.to(device)
         # print(f"CQT shape in train: {S.shape}")
@@ -51,10 +53,16 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         if not emb_ssm.shape == I1.shape == I2.shape:
             print(f"Shapes of emb_ssm, I1, I2: {emb_ssm.shape}, {I1.shape}, {I2.shape}")
             print(f" input shape: {S.shape}")
-        # loss1 = assymetric_loss(emb_ssm, I1, L)
+        # loss1 = asymmetric_loss(emb_ssm, I1, L)
         loss1 = weighted_mse_loss(emb_ssm, I1, L)
         loss2 = weighted_mse_loss(emb_ssm, I2, L)
-        loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2
+        for param in model.parameters():
+            l1_reg += param.abs().sum()
+
+        loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2 + cfg['lambda'] * l1_reg
+
+
+
 
         loss.backward()
         optimizer.step()
