@@ -90,13 +90,13 @@ class LIMEDataset(Dataset):
         crema_pcp = crema_pcp / (np.linalg.norm(crema_pcp, axis=0, keepdims=True) + np.finfo(float).eps)
 
         crema_SSM = compute_sm_ti(crema_pcp)
-        # if self.crema_threshold is not None:
-        #     crema_SSM[crema_SSM < self.crema_threshold] = 0
-        # else:cfg['thresh']
-        #     crema_SSM[crema_SSM < np.median(crema_SSM)] = 0
+        if self.crema_threshold is not None:
+            crema_SSM[crema_SSM < self.crema_threshold] = 0
+        else:
+            crema_SSM[crema_SSM < np.median(crema_SSM)] = 0
 
         lyr_SSM = compute_sm_ti(lyr_enc)
-        # lyr_SSM[lyr_SSM < self.lyr_enc_threshold] = 0
+        lyr_SSM[lyr_SSM < self.lyr_enc_threshold] = 0
         
         
         cqt = torch.from_numpy(cqt).permute(2,1,0).to(torch.float32) # Shape compatible with the collate_fn
