@@ -37,7 +37,7 @@ parser.add_argument('--ckp', default='lime_config0_0', type=str,
 def train(cfg, train_loader, model, optimizer, augment=None):
     model.train()
     loss_epoch = 0
-    l1_reg = 0
+    
     for idx, (S, I1, I2, L) in enumerate(train_loader):
         S, I1, I2 = S.to(device), I1.to(device), I2.to(device)
         # print(f"CQT shape in train: {S.shape}")
@@ -56,12 +56,12 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         # loss1 = asymmetric_loss(emb_ssm, I1, L)
         loss1 = weighted_mse_loss(emb_ssm, I1, L)
         loss2 = weighted_mse_loss(emb_ssm, I2, L)
+        
+        l1_reg = 0
         for param in model.parameters():
             l1_reg += param.abs().sum()
 
         loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2 + cfg['lambda'] * l1_reg
-
-
 
 
         loss.backward()
