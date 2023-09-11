@@ -3,7 +3,7 @@ import torch.nn.functional as F
 
 def weighted_mse_loss(emb_SSM, label_SSM, audio_len):
     batch_size = emb_SSM.shape[0]
-    weights = torch.reciprocal(audio_len.float())
+    weights = torch.reciprocal(audio_len.float()) **2
     sq_error = (emb_SSM - label_SSM) **2
     sq_error = sq_error.view(batch_size, -1)
     loss = torch.sum(sq_error * weights.view(-1, 1), axis=1)
