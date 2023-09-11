@@ -31,7 +31,7 @@ crema_threshold : null
 lyr_enc_threshold : 1
 norm : 0.95
 embed_dim : 12
-lambda: 0.05
+lambda: 0.2
 
 # Model parameters
 SE_blocks: [1, 2, 1, 2]
