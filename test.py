@@ -29,6 +29,8 @@ parser.add_argument('--scape_plot', type=bool, default=False,
                     help='save example scape plot')
 parser.add_argument('--preprocess', type=bool, default=False, 
                     help='preprocess test audio to cqt')
+parser.add_argument('--match', type=str, default=None, 
+                    help='evaluate models ending with this string')
 
 def create_test_metadata(cfg, test_dir, ground_truth_path):
     metadata = []
@@ -71,6 +73,8 @@ def main():
     score_ckp = {}
     for fpath in glob.glob('checkpoint/*.pth'):
         if not fpath.endswith('0.pth'):
+            continue
+        if args.match is not None and args.match not in fpath:
             continue
         print(f"Loading checkpoint {fpath} ...")
         ckp_name = fpath.split('/')[-1].split('.')[0]
