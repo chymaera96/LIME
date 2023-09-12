@@ -20,7 +20,7 @@ hop_length : 500
 
 # Hyperparameters
 seed : 42
-batch_size : 64
+batch_size : 32
 num_workers : 4
 lr : 0.0005
 n_epochs : 100
@@ -31,7 +31,7 @@ crema_threshold : null
 lyr_enc_threshold : 1
 norm : 0.95
 embed_dim : 12
-lambda: 0.05
+lambda: 0.0
 
 # Model parameters
 SE_blocks: [1, 2, 1, 2]
@@ -44,5 +44,6 @@ max_dim : 800
 pad_param : 0.2
 n_channels : 20
 filter_width : 5
+smooth_win : 5
 
 

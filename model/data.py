@@ -46,6 +46,7 @@ class LIMEDataset(Dataset):
         self.crema_threshold = cfg['crema_threshold']
         self.lyr_enc_threshold = cfg['lyr_enc_threshold']
         self.norm = cfg['norm']
+        self.L = cfg['smooth_win']
         self.train = train
 
     def __getitem__(self, idx):
@@ -89,13 +90,13 @@ class LIMEDataset(Dataset):
         # Normalize crema_pcp vectors
         crema_pcp = crema_pcp / (np.linalg.norm(crema_pcp, axis=0, keepdims=True) + np.finfo(float).eps)
 
-        crema_SSM = compute_sm_ti(crema_pcp)
+        crema_SSM = compute_sm_ti(crema_pcp, L=self.L)
         if self.crema_threshold is not None:
             crema_SSM[crema_SSM < self.crema_threshold] = 0
         else:
             crema_SSM[crema_SSM < np.median(crema_SSM)] = 0
 
-        lyr_SSM = compute_sm_ti(lyr_enc)
+        lyr_SSM = compute_sm_ti(lyr_enc, L=self.L)
         lyr_SSM[lyr_SSM < self.lyr_enc_threshold] = 0
         
         

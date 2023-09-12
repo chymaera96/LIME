@@ -59,12 +59,14 @@ def flip(matrix_batch):
 def compute_smooth_ssm(emb_batch, thresh=None, L=5):
     ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
 
+    if thresh is not None:
+        if thresh == 'median':
+            thresh = torch.median(ssm)
+        ssm[ssm < thresh] = 0.0
+
     # Forward-backward diagonal smoothing
     ssm_f = diagonal_smoothing(ssm, L)
     ssm_b = flip(diagonal_smoothing(flip(ssm_f), L))
     ssm = flip(ssm_b)
-    
-    if thresh is not None:
-        ssm[ssm < thresh] = 0
 
     return ssm

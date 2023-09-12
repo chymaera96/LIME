@@ -92,8 +92,8 @@ def main():
             emb = model(cqt)
             print(f"Processing audio {audio_id} ...")
             # torch.save(os.path.join(args.emb_dir, f"{audio_id}.pt"), emb)
-            S = compute_smooth_ssm(emb).squeeze(0)
-            S[S < torch.median(S)] = 0
+            # S[S < torch.median(S)] = 0
+            S = compute_smooth_ssm(emb, thresh='median').squeeze(0)
             ssm= S.detach().cpu().numpy()
             if ix == 0:
                 plt.imshow(ssm, cmap='gray_r', origin='lower')
