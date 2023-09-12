@@ -25,7 +25,7 @@ num_workers : 4
 lr : 0.0005
 n_epochs : 100
 T_max : 80
-gamma : 0.8
+gamma : 1.0
 num_workers : 4
 crema_threshold : null
 lyr_enc_threshold : 1
@@ -37,13 +37,13 @@ lambda: 0.0
 SE_blocks: [1, 2, 1, 2]
 freq_mask: 28
 time_mask: 100
-noise_std: 0.1
+noise_std: 0.01
 
 # Thumbnaiing parameters
 max_dim : 800
 pad_param : 0.2
 n_channels : 20
 filter_width : 5
-smooth_win : 5
+smooth_win : 10
 
 
