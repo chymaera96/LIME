@@ -44,6 +44,6 @@ max_dim : 800
 pad_param : 0.2
 n_channels : 20
 filter_width : 5
-smooth_win : 10
+smooth_win : 5
 
 
