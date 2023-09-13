@@ -20,7 +20,7 @@ hop_length : 500
 
 # Hyperparameters
 seed : 42
-batch_size : 128
+batch_size : 64
 num_workers : 4
 lr : 0.001
 n_epochs : 32
