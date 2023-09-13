@@ -53,8 +53,8 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         if not emb_ssm.shape == I1.shape == I2.shape:
             print(f"Shapes of emb_ssm, I1, I2: {emb_ssm.shape}, {I1.shape}, {I2.shape}")
             print(f" input shape: {S.shape}")
-        # loss1 = asymmetric_loss(emb_ssm, I1, L)
-        loss1 = weighted_mse_loss(emb_ssm, I1, L)
+        loss1 = asymmetric_loss(emb_ssm, I1, L)
+        # loss1 = weighted_mse_loss(emb_ssm, I1, L)
         loss2 = weighted_mse_loss(emb_ssm, I2, L)
 
         l1_reg = 0
