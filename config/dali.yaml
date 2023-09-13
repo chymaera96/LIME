@@ -23,7 +23,7 @@ seed : 42
 batch_size : 32
 num_workers : 4
 lr : 0.0005
-n_epochs : 100
+n_epochs : 32
 T_max : 80
 gamma : 0.8
 num_workers : 4
