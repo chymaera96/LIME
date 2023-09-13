@@ -49,7 +49,7 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         output = model(S)
         # print(f"Output shape: {output.shape}")
         emb_ssm = compute_smooth_ssm(output, thresh=None, L=cfg['smooth_win'])
-        emb_ssm[emb_ssm < cfg['threshhold']] = 0.0
+        emb_ssm[emb_ssm < cfg['threshold']] = 0.0
         if not emb_ssm.shape == I1.shape == I2.shape:
             print(f"Shapes of emb_ssm, I1, I2: {emb_ssm.shape}, {I1.shape}, {I2.shape}")
             print(f" input shape: {S.shape}")
