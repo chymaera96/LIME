@@ -48,7 +48,7 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         # print(f"CQT shape after augment: {S.shape}")
         output = model(S)
         # print(f"Output shape: {output.shape}")
-        emb_ssm[emb_ssm < 0.5] = 0.0
+        output[output < 0.5] = 0.0
         emb_ssm = compute_smooth_ssm(output, thresh=None, L=cfg['smooth_win'])
         if not emb_ssm.shape == I1.shape == I2.shape:
             print(f"Shapes of emb_ssm, I1, I2: {emb_ssm.shape}, {I1.shape}, {I2.shape}")
