@@ -98,6 +98,7 @@ class LIMEDataset(Dataset):
 
         lyr_SSM = compute_sm_ti(lyr_enc, L=self.L)
         lyr_SSM[lyr_SSM < self.lyr_enc_threshold] = 0
+        lyr_SSM = (lyr_SSM - np.min(lyr_SSM)) / (np.max(lyr_SSM) - np.min(lyr_SSM))
         
         
         cqt = torch.from_numpy(cqt).permute(2,1,0).to(torch.float32) # Shape compatible with the collate_fn
