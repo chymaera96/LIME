@@ -20,10 +20,10 @@ hop_length : 500
 
 # Hyperparameters
 seed : 42
-batch_size : 32
+batch_size : 128
 num_workers : 4
 lr : 0.001
-n_epochs : 128
+n_epochs : 32
 T_max : 80
 gamma : 0.01
 num_workers : 4
