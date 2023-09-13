@@ -62,7 +62,7 @@ def compute_smooth_ssm(emb_batch, thresh=None, L=5):
 
     # L2 Normalizing embedding vectors for each time step
     norm = torch.norm(emb_batch, dim=1, keepdim=True)
-    epsilon = torch.finfo(emb_batch.dtype).eps
+    epsilon = 1e-6
     emb_batch = emb_batch / (norm + epsilon)
     # print(f"norm: {norm.shape}")
     ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
