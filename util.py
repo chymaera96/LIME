@@ -61,10 +61,11 @@ def flip(matrix_batch):
 def compute_smooth_ssm(emb_batch, thresh=None, L=5):
 
     # L2 Normalizing embedding vectors for each time step
-    norm = torch.norm(emb_batch, dim=2, keepdim=True)
+    norm = torch.norm(emb_batch, dim=1, keepdim=True)
     emb_batch = emb_batch / norm
     print(f"norm: {norm.shape}")
     ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
+    print(f"max ssm value: {torch.max(ssm)}")
     assert (ssm <= 1.0).all()
     if thresh is not None:
         if thresh == 'median':
