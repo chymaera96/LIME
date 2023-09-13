@@ -23,16 +23,16 @@ seed : 42
 batch_size : 32
 num_workers : 4
 lr : 0.001
-n_epochs : 32
+n_epochs : 128
 T_max : 80
-gamma : 0.1
+gamma : 0.01
 num_workers : 4
-crema_threshold : 0.25
+crema_threshold : 0.75
 lyr_enc_threshold : 1
 norm : 0.95
-embed_dim : 12
+embed_dim : 64
 lambda: 0.0
-threshold: 0.25
+threshold: 0.75
 
 # Model parameters
 SE_blocks: [1, 2, 1, 2]
