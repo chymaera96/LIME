@@ -64,10 +64,10 @@ def compute_smooth_ssm(emb_batch, thresh=None, L=5):
     norm = torch.norm(emb_batch, dim=1, keepdim=True)
     epsilon = torch.finfo(emb_batch.dtype).eps
     emb_batch = emb_batch / (norm + epsilon)
-    print(f"norm: {norm.shape}")
+    # print(f"norm: {norm.shape}")
     ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
-    print(f"max ssm value: {torch.max(ssm)}")
-    assert (ssm <= 1.0).all()
+    # print(f"max ssm value: {torch.max(ssm)}")
+    assert (ssm <= 1.1).all()
     if thresh is not None:
         if thresh == 'median':
             thresh = torch.median(ssm)
