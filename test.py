@@ -72,8 +72,8 @@ def main():
         df = pd.read_csv('data/test/salami_test.csv')
     score_ckp = {}
     for fpath in glob.glob('checkpoint/*.pth'):
-        # if not fpath.endswith('0.pth'):
-        #     continue
+        if not fpath.endswith('0.pth') or not fpath.endswith('5.pth'):
+            continue
         if args.match is not None and args.match not in fpath:
             continue
         print(f"Loading checkpoint {fpath} ...")
