@@ -89,7 +89,7 @@ class LIMEDataset(Dataset):
                 lyr_enc = np.pad(lyr_enc, ((0,0), (pad, pad)), mode='constant', constant_values=0)
         # Normalize crema_pcp vectors
         crema_pcp = crema_pcp / (np.linalg.norm(crema_pcp, axis=0, keepdims=True) + np.finfo(float).eps)
-
+        assert np.max(crema_pcp) <= 1.1
         crema_SSM = compute_sm_ti(crema_pcp, L=self.L)
         if self.crema_threshold is not None:
             crema_SSM[crema_SSM < self.crema_threshold] = 0
