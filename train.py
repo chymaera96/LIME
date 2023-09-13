@@ -61,7 +61,7 @@ def train(cfg, train_loader, model, optimizer, augment=None):
         for param in model.parameters():
             l1_reg += param.abs().sum()
 
-        loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2 #+ cfg['lambda'] * l1_reg
+        loss = cfg['gamma'] * loss1 + (1 - cfg['gamma']) * loss2 + cfg['lambda'] * l1_reg
 
 
         loss.backward()

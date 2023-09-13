@@ -25,13 +25,13 @@ num_workers : 4
 lr : 0.0005
 n_epochs : 32
 T_max : 80
-gamma : 0.8
+gamma : 0.5
 num_workers : 4
 crema_threshold : 0.5
 lyr_enc_threshold : 1
 norm : 0.95
 embed_dim : 12
-lambda: 0.0
+lambda: 0.02
 threshold: 0.25
 
 # Model parameters
