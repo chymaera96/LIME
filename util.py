@@ -48,7 +48,9 @@ def diagonal_smoothing(matrix_batch, window_size):
     kernel_forward /= window_size
 
     # Perform 2D convolution with the custom kernel
-    smoothed_batch = F.conv2d(matrix_batch.view(batch_size, 1, seq_len, seq_len), kernel_forward.view(1, 1, window_size, window_size), padding=(window_size // 2, window_size // 2))
+    smoothed_batch = F.conv2d(matrix_batch.view(batch_size, 1, seq_len, seq_len), 
+                              kernel_forward.view(1, 1, window_size, window_size), 
+                              padding=(window_size // 2, window_size // 2))
 
     return smoothed_batch.view(batch_size, seq_len, seq_len)
 
@@ -57,8 +59,11 @@ def flip(matrix_batch):
     return flipped_batch
 
 def compute_smooth_ssm(emb_batch, thresh=None, L=5):
-    ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
 
+    # L2 Normalizing embedding vectors for each time step
+    emb_batch = emb_batch / torch.norm(emb_batch, dim=1, keepdim=True) 
+    ssm = torch.bmm(emb_batch.transpose(1,2), emb_batch)
+    assert (ssm <= 1.0).all()
     if thresh is not None:
         if thresh == 'median':
             thresh = torch.median(ssm)

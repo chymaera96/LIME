@@ -25,9 +25,9 @@ num_workers : 4
 lr : 0.0005
 n_epochs : 100
 T_max : 80
-gamma : 1.0
+gamma : 0.8
 num_workers : 4
-crema_threshold : null
+crema_threshold : 0.5
 lyr_enc_threshold : 1
 norm : 0.95
 embed_dim : 12
